@@ -21,7 +21,7 @@ module Cupid
     end
 
     private
-      def build_rqeuest(type, method, body)
+      def build_request(type, method, body)
         options         = args.extract_options!
 
         client = Savon::Client.new(@api_wsdl)

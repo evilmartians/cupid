@@ -3,7 +3,7 @@ module Cupid
     def retreive_email_folders(account)
       soap_body = '<RetrieveRequest>
                     <ClientIDs>
-                    <ID>' + account + '</ID>
+                    <ID>' + account.to_s + '</ID>
                     </ClientIDs>
                     <ObjectType>DataFolder</ObjectType>
                     <Properties>ID</Properties>
