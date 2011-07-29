@@ -22,8 +22,6 @@ module Cupid
 
     private
       def build_request(type, method, body)
-        options         = args.extract_options!
-
         client = Savon::Client.new(@api_wsdl)
         client.wsse.username = @username
         client.wsse.password = @password
