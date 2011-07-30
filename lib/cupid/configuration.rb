@@ -12,8 +12,8 @@ module Cupid
   module Configuration
     attr_accessor(
       :username,
-      :password,
-      :api_type
+      # :api_type,
+      :password
     )
   end
 end

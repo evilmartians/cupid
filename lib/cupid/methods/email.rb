@@ -15,7 +15,7 @@ module Cupid
                       <SimpleOperator>like</SimpleOperator>
                       <Value>email</Value>
                     </Filter>
-                   <RetrieveRequest>'
+                   </RetrieveRequest>'
 
       build_request('Retrieve', 'RetrieveRequestMsg', soap_body)
     end

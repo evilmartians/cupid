@@ -4,6 +4,7 @@ module Cupid
   class Session
     DEFAULTS = {
       :soap_s4_url          => "https://webservice.s4.exacttarget.com/etframework.wsdl",
+      :wsa_soap_s4_to       => "https://webservice.s4.exacttarget.com/Service.asmx",
       :use_ssl              => true
     }
 
@@ -18,6 +19,7 @@ module Cupid
       @api_url = Net::HTTP.new(@api_uri.host, @api_uri.port)
 
       @api_url.use_ssl = DEFAULTS[:use_ssl]
+      @wsa_soap_s4_to = DEFAULTS[:wsa_soap_s4_to]
     end
 
     private
@@ -35,7 +37,7 @@ module Cupid
               'a:Address' => 'http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous'
             },
           'VsDebuggerCausalityData' => 'uIDPo5GdUXRQCEBNrqnw0gOEloMAAAAAIAi4IHpPlUiMs1MZ2raBIhJnF/jqJLlAgZIny03R+tgACQAA',
-          'a:To' => @api_uri
+          'a:To' => @wsa_soap_s4_to
         }
 
         namespaces = {
