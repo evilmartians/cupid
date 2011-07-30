@@ -17,7 +17,9 @@ module Cupid
                     </Filter>
                    </RetrieveRequest>'
 
-      build_request('Retrieve', 'RetrieveRequestMsg', soap_body)
+      response = build_request('Retrieve', 'RetrieveRequestMsg', soap_body)
+      response = Nokogiri::XML(response.http.body).remove_namespaces!
+      all_folders = response.css('Results').map{|f| {f.css('Name').to_a.map(&:text).join('/') => f.css('ID')[0].text}}
     end
 
     def create_email(subject, body, *args)
@@ -26,7 +28,7 @@ module Cupid
       options[:body] = CGI.escapeHTML body.to_s
       
       options[:email_type] = 'HTML'
-      options[:is_html_paste] = true # ??
+      options[:is_html_paste] = 'true' # ??
 
       soap_body = '<Objects xsi:type="Email">' +
                     create_email_object(options) +
