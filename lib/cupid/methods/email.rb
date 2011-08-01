@@ -34,7 +34,13 @@ module Cupid
                     create_email_object(options) +
                   '</Objects>'
 
-      build_request('Create', 'CreateRequest', soap_body)
+      response = build_request('Create', 'CreateRequest', soap_body)
+      response = Nokogiri::XML(response.http.body).remove_namespaces!
+      created_email_id = response.css('NewID').text
+    end
+
+    def email_link(email_id)
+      "https://members.s4.exacttarget.com/Content/Email/EmailEdit.aspx?eid=" + email_id.to_s
     end
 
     def create_emails(*args)
