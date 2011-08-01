@@ -13,13 +13,13 @@ Sponsored by Evil Martians <http://evilmartians.com>
 Puts this line into `Gemfile` then run `$ bundle`:
 
 ``` ruby
-gem 'cupid', '0.0.1'
+gem 'cupid', '0.0.2'
 ```
 
 Or if you are old-school Rails 2 developer put this into `config/environment.rb` and run `$ rake gems:install`:
 
 ``` ruby
-config.gem 'cupid', :version => '0.0.1'
+config.gem 'cupid', :version => '0.0.2'
 ```
 
 Or manually install cupid gem: `$ gem install cupid`
