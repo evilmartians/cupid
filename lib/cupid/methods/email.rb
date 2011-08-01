@@ -1,6 +1,6 @@
 module Cupid
   class Session
-    def retreive_email_folders(account)
+    def retrieve_email_folders(account)
       soap_body = '<RetrieveRequest>
                     <ClientIDs>
                     <ID>' + account.to_s + '</ID>
@@ -24,7 +24,7 @@ module Cupid
 
     def create_email(subject, body, *args)
       options = args.extract_options!
-      options[:subject] = subject.to_s
+      options[:subject] = CGI.escapeHTML subject.to_s
       options[:body] = CGI.escapeHTML body.to_s
       
       options[:email_type] = 'HTML'
