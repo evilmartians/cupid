@@ -1,9 +1,7 @@
 require 'erb'
 require 'uri'
 require 'savon'
-require 'logger'
 require 'builder'
-require 'net/https'
 require 'nokogiri'
 require 'cupid/session'
 
