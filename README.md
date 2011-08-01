@@ -1,6 +1,6 @@
 # Cupid gem — Create, organize and send emails through Exact Target
 
-Send love, not war. Peace brothers, ansha abdul. V
+Send love, not war. This version of cupid can only work with ET SOAP API with s4.
 
 ## Usage
 

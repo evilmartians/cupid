@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ['gazay@evilmartians.com']
   s.homepage    = ""
   s.summary     = %q{Create, organize and send emails through Exact Target SOAP API}
-  s.description = %q{Send love, not war. Peace brothers, ansha abdul. V}
+  s.description = %q{Send love, not war. This version of cupid can only work with ET SOAP API with s4.}
 
   s.rubyforge_project = "cupid"
 
