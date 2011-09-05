@@ -84,6 +84,11 @@ module Cupid
       folder_object +=  '<CustomerKey>' + options[:title].to_s + '</CustomerKey>' if options[:title]
       folder_object +=  '<Name>' + options[:title].to_s + '</Name>'
       folder_object +=  '<Description>' + options[:description].to_s + '</Description>' if options[:description]
+      folder_object +=  '<ContentType>' + options[:content_type].to_s + '</ContentType>' +
+                        '<IsActive>' + options[:is_active].to_s + '</IsActive>' +
+                        '<IsEditable>' + options[:is_editable].to_s + '</IsEditable>' +
+                        '<AllowChildren>' + options[:allow_children].to_s + '</AllowChildren>'
+
       if options[:parent]
         folder_object +=  '<ParentFolder>
                               <PartnerKey xsi:nil="true"/>
