@@ -42,6 +42,7 @@ module Cupid
     def create_folder(title, *args)
       options = args.extract_options!
       options[:title] = CGI.escapeHTML title.to_s
+      options[:description] ||= 'description'
 
       options[:content_type] ||= 'email'
       options[:is_active] ||= 'true'
@@ -82,9 +83,9 @@ module Cupid
       folder_object =   '<ObjectID xsi:nil="true"/>'
       folder_object +=  '<Client><ID>' + options[:client_id].to_s + '</ID></Client>' if options[:client_id]
       folder_object +=  '<CustomerKey>' + options[:title].to_s + '</CustomerKey>' if options[:title]
-      folder_object +=  '<Name>' + options[:title].to_s + '</Name>'
-      folder_object +=  '<Description>' + options[:description].to_s + '</Description>' if options[:description]
-      folder_object +=  '<ContentType>' + options[:content_type].to_s + '</ContentType>' +
+      folder_object +=  '<Name>' + options[:title].to_s + '</Name>' +
+                        '<Description>' + options[:description].to_s + '</Description>' +
+                        '<ContentType>' + options[:content_type].to_s + '</ContentType>' +
                         '<IsActive>' + options[:is_active].to_s + '</IsActive>' +
                         '<IsEditable>' + options[:is_editable].to_s + '</IsEditable>' +
                         '<AllowChildren>' + options[:allow_children].to_s + '</AllowChildren>'
