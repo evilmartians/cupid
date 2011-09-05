@@ -27,8 +27,9 @@ module Cupid
       options[:subject] = CGI.escapeHTML subject.to_s
       options[:body] = CGI.escapeHTML body.to_s
       
-      options[:email_type] = 'HTML'
-      options[:is_html_paste] = 'true' # ??
+      options[:email_type] ||= 'HTML'
+      options[:is_html_paste] ||= 'true' # ??
+      options[:character_set] ||= 'utf-8'
 
       soap_body = '<Objects xsi:type="Email">' +
                     create_email_object(options) +
@@ -76,7 +77,8 @@ module Cupid
       email_object +=  '<Subject>' + options[:subject] + '</Subject>' +
                        '<HTMLBody>' + options[:body] + '</HTMLBody>' +
                        '<EmailType>' + options[:email_type] + '</EmailType>' +
-                       '<IsHTMLPaste>' + options[:is_html_paste] + '</IsHTMLPaste>'
+                       '<IsHTMLPaste>' + options[:is_html_paste] + '</IsHTMLPaste>' +
+                       '<CharacterSet>' + options[:character_set] + '</CharacterSet>'
     end
 
     def create_folder_object(options)
