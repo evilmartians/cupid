@@ -39,6 +39,24 @@ module Cupid
       created_email_id = response.css('NewID').text
     end
 
+    def create_folder(title, *args)
+      options = args.extract_options!
+      options[:title] = CGI.escapeHTML title.to_s
+
+      options[:content_type] ||= 'email'
+      options[:is_active] ||= 'true'
+      options[:is_editable] ||= 'true'
+      options[:allow_children] ||= 'true'
+
+      soap_body = '<Objects xsi:type="DataFolder">' +
+                    create_folder_object(options) +
+                  '</Objects>'
+
+      response = build_request('Create', 'CreateRequest', soap_body)
+      response = Nokogiri::XML(response.http.body).remove_namespaces!
+      created_folder_id = response.css('NewID').text
+    end
+
     def email_link(email_id)
       "https://members.s4.exacttarget.com/Content/Email/EmailEdit.aspx?eid=" + email_id.to_s
     end
@@ -48,16 +66,32 @@ module Cupid
     end
 
     private
-      def create_email_object(options)
-        email_object =   '<ObjectID xsi:nil="true"/>'
-        email_object +=  '<Client><ID>' + options[:client_id].to_s + '</ID></Client>' if options[:client_id]
-        email_object +=  '<CategoryID>' + options[:category_id].to_s + '</CategoryID>' if options[:category_id]
-        email_object +=  '<Name>' + options[:name].to_s + '</Name>' if options[:name]
-        email_object +=  '<Description>' + options[:description].to_s + '</Description>' if options[:description]
-        email_object +=  '<Subject>' + options[:subject] + '</Subject>' +
-                         '<HTMLBody>' + options[:body] + '</HTMLBody>' +
-                         '<EmailType>' + options[:email_type] + '</EmailType>' +
-                         '<IsHTMLPaste>' + options[:is_html_paste] + '</IsHTMLPaste>'
+    def create_email_object(options)
+      email_object =   '<ObjectID xsi:nil="true"/>'
+      email_object +=  '<Client><ID>' + options[:client_id].to_s + '</ID></Client>' if options[:client_id]
+      email_object +=  '<CategoryID>' + options[:category_id].to_s + '</CategoryID>' if options[:category_id]
+      email_object +=  '<Name>' + options[:name].to_s + '</Name>' if options[:name]
+      email_object +=  '<Description>' + options[:description].to_s + '</Description>' if options[:description]
+      email_object +=  '<Subject>' + options[:subject] + '</Subject>' +
+                       '<HTMLBody>' + options[:body] + '</HTMLBody>' +
+                       '<EmailType>' + options[:email_type] + '</EmailType>' +
+                       '<IsHTMLPaste>' + options[:is_html_paste] + '</IsHTMLPaste>'
+    end
+
+    def create_folder_object(options)
+      folder_object =   '<ObjectID xsi:nil="true"/>'
+      folder_object +=  '<Client><ID>' + options[:client_id].to_s + '</ID></Client>' if options[:client_id]
+      folder_object +=  '<CustomerKey>' + options[:title].to_s + '</CustomerKey>' if options[:title]
+      folder_object +=  '<Name>' + options[:title].to_s + '</Name>'
+      folder_object +=  '<Description>' + options[:description].to_s + '</Description>' if options[:description]
+      if options[:parent]
+        folder_object +=  '<ParentFolder>
+                              <PartnerKey xsi:nil="true"/>
+                              <ModifiedDate xsi:nil="true"/>
+                              <ID>' + options[:parent].to_s + '</ID>
+                              <ObjectID xsi:nil="true"/>
+                           </ParentFolder>'
       end
+    end
   end
 end
