@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cupid (0.0.6)
+    cupid (0.0.8)
       builder (>= 2.1.2)
       nokogiri (>= 1.4.1)
       savon (>= 0.9.0)
