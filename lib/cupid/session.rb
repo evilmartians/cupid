@@ -12,6 +12,7 @@ module Cupid
       options     = args.extract_options!
       @username   = options[:username]    ||= Cupid.username
       @password   = options[:password]    ||= Cupid.password
+      @account    = options[:account]     ||= Cupid.account
       @headers    = {"Content-Type" => "application/x-www-form-urlencoded", "Connection" => "close"}
 
       @api_uri = @api_wsdl = DEFAULTS[:soap_s4_url]

@@ -38,7 +38,7 @@ body = {
 }
 
 header = {
-  'a:Action' => 'Retrieve',
+  'a:Action' => 'Create',
   'a:MessageID' => 'urn:uuid:99e6822c-5436-4fec-a243-3126c14924f6',
   'a:ReplyTo' => {
       'a:Address' => 'http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous'
@@ -116,6 +116,22 @@ body_noko = Nokogiri::XML::Builder.new do |xml|
     xml.properties "ID"
   }
 end
+
+body = '<Objects xsi:type="Send">
+<PartnerKey xsi:nil="true"/>
+<Client><ID>1058484</ID></Client>
+<ObjectID xsi:nil="true"/>
+<Email>
+<PartnerKey xsi:nil="true"/>
+<ID>565</ID>
+<ObjectID xsi:nil="true"/>
+</Email>
+<List>
+<PartnerKey xsi:nil="true"/>
+<ObjectID xsi:nil="true"/>
+<ID>57</ID>
+</List>
+</Objects>'
 # 
 # puts body
 # 
@@ -162,7 +178,7 @@ namespaces = {
 }
 # 
 response = client.request :retrieve do |soap|
-  soap.input = ['RetrieveRequestMsg', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
+  soap.input = ['CreateRequest', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
   soap.header = header
   soap.env_namespace = :s
   soap.namespaces = namespaces

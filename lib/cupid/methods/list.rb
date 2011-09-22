@@ -1,6 +1,7 @@
 module Cupid
   class Session
-    def retrieve_lists(account, properties=nil)
+    def retrieve_lists(account=nil, properties=nil)
+      account ||= @account
       properties ||= ['ID', 'CustomerKey']
       
       soap_body = build_retrieve(account.to_s, 'List', properties)

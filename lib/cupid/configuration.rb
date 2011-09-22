@@ -12,7 +12,8 @@ module Cupid
     attr_accessor(
       :username,
       # :api_type, #now it's only soap s4. But i want MOAR
-      :password
+      :password,
+      :account
     )
   end
 end

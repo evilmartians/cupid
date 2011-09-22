@@ -1,6 +1,7 @@
 module Cupid
   class Session
-    def retrieve_email_folders(account, properties=nil)
+    def retrieve_email_folders(account=nil, properties=nil)
+      account ||= @account
       properties ||= ['ID', 'Name', 'ParentFolder.ID', 'ParentFolder.Name']
       filters = 'Filter xsi:type="SimpleFilterPart"' => {
                   'Property' => 'ContentType',
@@ -18,7 +19,8 @@ module Cupid
       options = args.extract_options!
       options[:subject] = CGI.escapeHTML subject.to_s
       options[:body] = CGI.escapeHTML body.to_s
-      
+      options[:client_id] ||= @account
+
       options[:email_type] ||= 'HTML'
       options[:is_html_paste] ||= 'true' # ??
       options[:character_set] ||= 'utf-8'
@@ -36,6 +38,7 @@ module Cupid
       options = args.extract_options!
       options[:title] = CGI.escapeHTML title.to_s
       options[:description] ||= 'description'
+      options[:client_id] ||= @account
 
       options[:content_type] ||= 'email'
       options[:is_active] ||= 'true'
@@ -49,6 +52,17 @@ module Cupid
       response = build_request('Create', 'CreateRequest', soap_body)
       response = Nokogiri::XML(response.http.body).remove_namespaces!
       created_folder_id = response.css('NewID').text
+    end
+
+    def send_email_to_list(email_id, list_id, account=nil)
+      account ||= @account
+      soap_body = '<Objects xsi:type="Send">' +
+                    create_send_object(email_id, list_id, account) +
+                  '</Objects>'
+
+      response = build_request('Create', 'CreateRequest', soap_body)
+      response = Nokogiri::XML(response.http.body).remove_namespaces!
+      created_send_id = response.css('NewID').text
     end
 
     def email_link(email_id)
@@ -92,6 +106,23 @@ module Cupid
                               <ObjectID xsi:nil="true"/>
                            </ParentFolder>'
       end
+    end
+
+    def create_send_object(email_id, list_id, account)
+      send_object = '<PartnerKey xsi:nil="true"/>' +
+                     '<ObjectID xsi:nil="true"/>' +
+                     '<Client><ID>' + account.to_s + '</ID></Client>' +
+                     '<Email>' +
+                       '<PartnerKey xsi:nil="true"/>' +
+                       '<ID>' + email_id.to_s + '</ID>' +
+                       '<ObjectID xsi:nil="true"/>' +
+                     '</Email>' +
+                     '<List>' +
+                       '<PartnerKey xsi:nil="true"/>' +
+                       '<ObjectID xsi:nil="true"/>' +
+                       '<ID>' + list_id.to_s + '</CustomerKey>' +
+                     '</List>' +
+                     '</Objects>'
     end
   end
 end

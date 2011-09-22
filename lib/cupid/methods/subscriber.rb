@@ -3,6 +3,7 @@ module Cupid
     def create_subscriber(email, *args)
       options = args.extract_options!
       options[:email] = email.to_s
+      options[:client_id] ||= @account
 
       soap_body = '<Objects xsi:type="Subscriber">' +
                     create_subscriber_object(options) +
