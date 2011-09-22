@@ -61,17 +61,18 @@ module Cupid
     end
 
     def build_retrieve(id, object_type, properties, filters=nil)
-      body = {'RetrieveRequest' => {
-                'ClientIDs' => {
-                  'ID' => id
-                },
-                'ObjectType' => object_type,
-                'Properties' => properties
-              }
-             }
-      body['RetrieveRequest'].merge! filters if filters
+      body = '<RetrieveRequest>' +
+                '<ClientIDs>' +
+                  '<ID>' + id.to_s + '</ID>' +
+                '</ClientIDs>' +
+                '<ObjectType>' + object_type.to_s + '</ObjectType>' 
+      properties.each do |p|
+        body += '<Properties>' + p.to_s + '</Properties>'
+      end
 
-      body
+      body += filters if filters
+
+      body + '</RetrieveRequest>'
     end
   end
 end
