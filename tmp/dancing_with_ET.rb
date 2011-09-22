@@ -1,5 +1,6 @@
 require 'rubygems'
 # require 'ruby-debug'
+require 'nokogiri'
 require 'savon'
 require 'cgi'
 
@@ -91,17 +92,36 @@ body = '<RetrieveRequest>
 <ClientIDs>
 <ID>1058484</ID>
 </ClientIDs>
-<ObjectType>DataFolder</ObjectType>
+<ObjectType>List</ObjectType>
+<Properties>CustomerKey</Properties>
 <Properties>ID</Properties>
-<Properties>Name</Properties>
-<Properties>ParentFolder.ID</Properties>
-<Properties>ParentFolder.Name</Properties>
-<Filter xsi:type="SimpleFilterPart">
-<Property>ContentType</Property>
-<SimpleOperator>like</SimpleOperator>
-<Value>email</Value>
-</Filter>
 </RetrieveRequest>'
+
+body = {
+  'RetrieveRequest' => {
+    'ClientIDs' => {
+      'ID' => '1058484'
+    },
+    'ObjectType' => 'List',
+    'Properties' => ['CustomerKey', 'ID']
+  }
+}
+body_noko = Nokogiri::XML::Builder.new do |xml|
+  xml.retrieve_request {
+    xml.client_ids {
+      xml.id "1058484"
+    }
+    xml.object_type "List"
+    xml.properties "CustomerKey"
+    xml.properties "ID"
+  }
+end
+# 
+# puts body
+# 
+# puts '-============-'
+# 
+# puts body_noko.text
                       
 # body = '<RetrieveRequest>
 # <ClientIDs>

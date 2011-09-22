@@ -1,22 +1,14 @@
 module Cupid
   class Session
-    def retrieve_email_folders(account)
-      soap_body = '<RetrieveRequest>
-                    <ClientIDs>
-                    <ID>' + account.to_s + '</ID>
-                    </ClientIDs>
-                    <ObjectType>DataFolder</ObjectType>
-                    <Properties>ID</Properties>
-                    <Properties>Name</Properties>
-                    <Properties>ParentFolder.ID</Properties>
-                    <Properties>ParentFolder.Name</Properties>
-                    <Filter xsi:type="SimpleFilterPart">
-                      <Property>ContentType</Property>
-                      <SimpleOperator>like</SimpleOperator>
-                      <Value>email</Value>
-                    </Filter>
-                   </RetrieveRequest>'
+    def retrieve_email_folders(account, properties=nil)
+      properties ||= ['ID', 'Name', 'ParentFolder.ID', 'ParentFolder.Name']
+      filters = 'Filter xsi:type="SimpleFilterPart"' => {
+                  'Property' => 'ContentType',
+                  'SimpleOperator' => 'like',
+                  'Value' => 'email'
+                }
 
+      soap_body = build_retrieve(account.to_s, 'DataFolder', properties, filters)
       response = build_request('Retrieve', 'RetrieveRequestMsg', soap_body)
       response = Nokogiri::XML(response.http.body).remove_namespaces!
       all_folders = response.css('Results').map{|f| {f.css('Name').to_a.map(&:text).join('/') => f.css('ID')[0].text}}
