@@ -47,13 +47,13 @@ send_tracking_id = et_translator.send_email_to_list(email_id, list_id)
 Puts this line into `Gemfile` then run `$ bundle`:
 
 ``` ruby
-gem 'cupid', '0.1.0'
+gem 'cupid', '0.1.1'
 ```
 
 Or if you are old-school Rails 2 developer put this into `config/environment.rb` and run `$ rake gems:install`:
 
 ``` ruby
-config.gem 'cupid', :version => '0.1.0'
+config.gem 'cupid', :version => '0.1.1'
 ```
 
 Or manually install cupid gem: `$ gem install cupid`

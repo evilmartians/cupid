@@ -3,12 +3,11 @@ module Cupid
     def retrieve_email_folders(account=nil, properties=nil)
       account ||= @account
       properties ||= ['ID', 'Name', 'ParentFolder.ID', 'ParentFolder.Name']
-      filters = {'Filter xsi:type="SimpleFilterPart"' => {
-                  'Property' => 'ContentType',
-                  'SimpleOperator' => 'like',
-                  'Value' => 'email'
-                  }
-                }
+      filters = '<Filter xsi:type="SimpleFilterPart">' +
+                  '<Property>ContentType</Property>' +
+                  '<SimpleOperator>like</SimpleOperator>' +
+                  '<Value>email</Value>' +
+                '</Filter>'
 
       soap_body = build_retrieve(account.to_s, 'DataFolder', properties, filters)
       response = build_request('Retrieve', 'RetrieveRequestMsg', soap_body)
