@@ -40,6 +40,7 @@ module Cupid
       subscriber_object +=  '<FirstName>' + user[:first_name].to_s + '</FirstName>' if user[:first_name]
       subscriber_object +=  '<LastName>' + user[:last_name].to_s + '</LastName>' if user[:last_name]
       subscriber_object +=  '<EmailAddress>' + user[:email] + '</EmailAddress>'
+      subscriber_object += '</Objects>'
     end
     
     def list_object(list_id)
@@ -51,7 +52,5 @@ module Cupid
         </ObjectID>
       </Lists>'
     end
-
-    subscriber_object += '</Objects>'
   end
 end
