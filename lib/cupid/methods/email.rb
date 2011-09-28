@@ -15,6 +15,21 @@ module Cupid
       all_folders = response.css('Results').map{|f| {f.css('Name').to_a.map(&:text).join('/') => f.css('ID')[0].text}}
     end
 
+    def retrieve_email_copies(name, account=nil, properties=nil)
+      account ||= @account
+      properties ||= ['ID', 'Name']
+      filters = '<Filter xsi:type="SimpleFilterPart">' +
+                  '<Property>Name</Property>' +
+                  '<SimpleOperator>like</SimpleOperator>' +
+                  '<Value>' + name + '</Value>' +
+                '</Filter>'
+
+      soap_body = build_retrieve(account.to_s, 'Email', properties, filters)
+      response = build_request('Retrieve', 'RetrieveRequestMsg', soap_body)
+      response = Nokogiri::XML(response.http.body).remove_namespaces!
+      all_copies = response.css('Results').map{|f| {f.css('Name').to_a.map(&:text).join('/') => f.css('ID')[0].text}}
+    end
+
     def create_email(subject, body, *args)
       options = args.extract_options!
       options[:subject] = CGI.escapeHTML subject.to_s

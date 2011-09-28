@@ -8,7 +8,7 @@ client = Savon::Client.new do
   wsdl.document = "https://webservice.s4.exacttarget.com/etframework.wsdl"
 end
 
-client.wsse.credentials "username", "password"
+client.wsse.credentials "", ""
 client.wsse.created_at = Time.now.utc
 client.wsse.expires_at = (Time.now + 60).utc
 client.http.headers["SOAPAction"] = '"urn:example#service"'
@@ -138,22 +138,37 @@ body = '<Objects xsi:type="Send">
 # puts '-============-'
 # 
 # puts body_noko.text
-                      
-# body = '<RetrieveRequest>
-# <ClientIDs>
-# <ID>1058396</ID>
-# </ClientIDs>
-# <ObjectType>DataFolder</ObjectType>
-# <Properties>ID</Properties>
-# <Properties>Name</Properties>
-# <Properties>ParentFolder.ID</Properties>
-# <Properties>ParentFolder.Name</Properties>
-# <Filter xsi:type="SimpleFilterPart">
-# <Property>ContentType</Property>
-# <SimpleOperator>like</SimpleOperator>
-# <Value>email</Value>
-# </Filter>
-# </RetrieveRequest>'
+body = '<RetrieveRequest>
+<ClientIDs>
+<ID>1058484</ID>
+</ClientIDs>
+<ObjectType>DataFolder</ObjectType>
+<Properties>ID</Properties>
+<Properties>Name</Properties>
+<Properties>ParentFolder.ID</Properties>
+<Properties>ParentFolder.Name</Properties>
+<Filter xsi:type="SimpleFilterPart">
+<Property>ContentType</Property>
+<SimpleOperator>like</SimpleOperator>
+<Value>email</Value>
+</Filter>
+</RetrieveRequest>'
+
+body = '<RetrieveRequest>
+<ClientIDs>
+<ID>1058484</ID>
+</ClientIDs>
+<ObjectType>Email</ObjectType>
+<Properties>ID</Properties>
+<Properties>Name</Properties>
+<Properties>Folder</Properties>
+<Properties>CategoryID</Properties>
+<Filter xsi:type="SimpleFilterPart">
+<Property>Name</Property>
+<SimpleOperator>like</SimpleOperator>
+<Value>120911_piter_follow_up_side</Value>
+</Filter>
+</RetrieveRequest>'
 
 html = CGI.escapeHTML('<center><h2>Way Cool Email</h2></center>')
 
@@ -178,7 +193,7 @@ namespaces = {
 }
 # 
 response = client.request :retrieve do |soap|
-  soap.input = ['CreateRequest', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
+  soap.input = ['RetrieveRequestMsg', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
   soap.header = header
   soap.env_namespace = :s
   soap.namespaces = namespaces

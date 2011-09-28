@@ -25,6 +25,9 @@ et_translator = Cupid::Session.new
 # Retrieving folders for not default account (your_account_id can be nil - default account on ET)
 folders = et_translator.retrieve_email_folders
 
+# Retrieving email copies for not default account (your_account_id can be nil - default account on ET)
+copies = et_translator.retrieve_email_copies(name)
+
 # Creating new folder
 # not required fields for folder: description, content_type, is_active, is_editable, allow_children
 new_folder_id = et_translator.create_folder('title', :parent => parent_directory_id)
@@ -47,13 +50,13 @@ send_tracking_id = et_translator.send_email_to_list(email_id, list_id)
 Puts this line into `Gemfile` then run `$ bundle`:
 
 ``` ruby
-gem 'cupid', '0.1.1'
+gem 'cupid', '0.1.2'
 ```
 
 Or if you are old-school Rails 2 developer put this into `config/environment.rb` and run `$ rake gems:install`:
 
 ``` ruby
-config.gem 'cupid', :version => '0.1.1'
+config.gem 'cupid', :version => '0.1.2'
 ```
 
 Or manually install cupid gem: `$ gem install cupid`
