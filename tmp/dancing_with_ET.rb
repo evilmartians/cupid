@@ -38,7 +38,7 @@ body = {
 }
 
 header = {
-  'a:Action' => 'Create',
+  'a:Action' => 'Delete',
   'a:MessageID' => 'urn:uuid:99e6822c-5436-4fec-a243-3126c14924f6',
   'a:ReplyTo' => {
       'a:Address' => 'http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous'
@@ -129,7 +129,7 @@ body = '<Objects xsi:type="Send">
 <List>
 <PartnerKey xsi:nil="true"/>
 <ObjectID xsi:nil="true"/>
-<ID>57</ID>
+<ID>354</ID>
 </List>
 </Objects>'
 # 
@@ -170,13 +170,39 @@ body = '<RetrieveRequest>
 </Filter>
 </RetrieveRequest>'
 
-html = CGI.escapeHTML('<center><h2>Way Cool Email</h2></center>')
+body = '<RetrieveRequest>
+<ClientIDs>
+<ID>1058484</ID>
+</ClientIDs>
+<ObjectType>Email</ObjectType>
+<Properties>ID</Properties>
+<Properties>Name</Properties>
+<Properties>Folder</Properties>
+<Properties>CategoryID</Properties>
+<Filter xsi:type="SimpleFilterPart">
+<Property>Name</Property>
+<SimpleOperator>like</SimpleOperator>
+<Value>120911_piter_follow_up_side</Value>
+</Filter>
+</RetrieveRequest>'
 
+body = '
+<Objects xsi:type="Email">
+<Client>
+<ID>1058484</ID>
+</Client>
+<ID>1724</ID>
+<ObjectID xsi:nil="true"/>
+</Objects>
+'
+
+html = CGI.escapeHTML('<center><h2>Way Cool Email</h2></center>')
+# 
 # body = '
 #     <Objects xsi:type="Email">  
 #        <ObjectID xsi:nil="true"/>
 #        <Client><ID>1058484</ID></Client>
-#        <CategoryID>277</CategoryID>
+#        <CategoryID>354</CategoryID>
 #        <HTMLBody>'+html+'</HTMLBody>  
 #        <Subject>Test Subject111</Subject>  
 #        <EmailType>HTML</EmailType>  
@@ -193,7 +219,7 @@ namespaces = {
 }
 # 
 response = client.request :retrieve do |soap|
-  soap.input = ['RetrieveRequestMsg', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
+  soap.input = ['DeleteRequest', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
   soap.header = header
   soap.env_namespace = :s
   soap.namespaces = namespaces

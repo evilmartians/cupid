@@ -28,21 +28,48 @@ folders = et_translator.retrieve_email_folders
 # Retrieving email copies for not default account (your_account_id can be nil - default account on ET)
 copies = et_translator.retrieve_email_copies(name)
 
+# Retrieving emails from list for not default account (your_account_id can be nil - default account on ET)
+copies = et_translator.retrieve_emails_from_list(list_id)
+
 # Creating new folder
 # not required fields for folder: description, content_type, is_active, is_editable, allow_children
 new_folder_id = et_translator.create_folder('title', :parent => parent_directory_id)
+
+# Creating folders
+# not required fields for folders: description, content_type, is_active, is_editable, allow_children
+new_folder_ids = et_translator.create_folders(['title', 'title2'], :parent => parent_directory_id)
 
 # Creating new email
 # not required fields for email: email_type, is_html_paste, character_set, name, description, category_id
 new_email_id = et_translator.create_email('subject', 'body')
 
+# Creating emails
+# not required fields for emails: email_type, is_html_paste, character_set, name, description, category_id
+new_email_ids = et_translator.create_emails({'subject' => 'body', 'subject2' => 'body2'})
+
+# User object:
+{
+  :email => 'email@email.com',
+  :lists => [list_id1, list_id2...],
+  :first_name => 'Name',
+  :last_name => 'Lastname'
+}
+
 # Creating new subscriber
 # not required fields for subscriber: first_name, last_name, client_id
-new_subscriber_id = et_translator.create_subscriber('email@email.com')
+new_subscriber_id = et_translator.create_subscriber(user_object)
+
+# Creating subscribers
+# not required fields for subscriber: first_name, last_name, client_id
+new_subscriber_ids = et_translator.create_subscribers([user_object1, user_object2...])
 
 # Send email to list
 # not required fields for send: account
 send_tracking_id = et_translator.send_email_to_list(email_id, list_id)
+
+# Send emails to lists
+# not required fields for send: account
+send_tracking_ids = et_translator.send_emails_to_lists({'email_id' => 'list_id','email_id' => 'list_id'...})
 ```
 
 ## Installation
@@ -50,13 +77,13 @@ send_tracking_id = et_translator.send_email_to_list(email_id, list_id)
 Puts this line into `Gemfile` then run `$ bundle`:
 
 ``` ruby
-gem 'cupid', '0.1.2'
+gem 'cupid', '0.2.0'
 ```
 
 Or if you are old-school Rails 2 developer put this into `config/environment.rb` and run `$ rake gems:install`:
 
 ``` ruby
-config.gem 'cupid', :version => '0.1.2'
+config.gem 'cupid', :version => '0.2.0'
 ```
 
 Or manually install cupid gem: `$ gem install cupid`

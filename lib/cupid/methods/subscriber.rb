@@ -1,38 +1,57 @@
 module Cupid
   class Session
-    def create_subscriber(email, *args)
-      options = args.extract_options!
-      options[:email] = email.to_s
-      options[:client_id] ||= @account
+    # User object:
+    # {
+    #   :email => 'email@email.com',
+    #   :lists => [list_id1, list_id2...],
+    #   :first_name => 'Name',
+    #   :last_name => 'Lastname'
+    # }
+    def create_subscriber(user, account=nil)
+      soap_body = prepare_subscriber(user, account)
 
-      soap_body = '<Objects xsi:type="Subscriber">' +
-                    create_subscriber_object(options) +
-                  '</Objects>'
-
-      build_request('Create', 'CreateRequest', soap_body)
+      response = build_request('Create', 'CreateRequest', soap_body)
+      response = Nokogiri::XML(response.http.body).remove_namespaces!
+      created_user_id = response.css('NewID').text
     end
 
-    def create_subscribers(*args)
-      raise NoMethodError.new "I will implement this method soon"
+    def create_subscribers(users, account=nil)
+      soap_body = users.map{ |user| prepare_subscriber(user, account) }
+
+      response = build_request('Create', 'CreateRequest', soap_body)
+      response = Nokogiri::XML(response.http.body).remove_namespaces!
+      created_user_id = response.css('NewID').text
     end
 
     private
-      def create_subscriber_object(options)
-        subscriber_object =   '<ObjectID xsi:nil="true"/>'
-        subscriber_object +=  '<PartnerKey xsi:nil="true" />'
-        subscriber_object +=  '<Client><ID>' + options[:client_id].to_s + '</ID></Client>' if options[:client_id]
-        subscriber_object +=  '<Lists>' + options[:lists].map(&:list_object).join('') + '</Lists>' if options[:lists]
-        subscriber_object +=  '<FirstName>' + options[:first_name].to_s + '</FirstName>' if options[:first_name]
-        subscriber_object +=  '<LastName>' + options[:last_name].to_s + '</LastName>' if options[:last_name]
-        subscriber_object +=  '<EmailAddress>' + options[:email] + '</EmailAddress>'
-      end
-      
-      def list_object(list_id)
-        '<PartnerKey xsi:nil="true">
+
+    def prepare_subscriber(user, account=nil)
+      user[:lists].map!{ |list| list_object(list) }
+      account ||= @account
+
+      create_subscriber_object(user, account)
+    end
+
+    def create_subscriber_object(user, account)
+      subscriber_object =   '<Objects xsi:type="Subscriber"><ObjectID xsi:nil="true"/>'
+      subscriber_object +=  '<PartnerKey xsi:nil="true" />'
+      subscriber_object +=  '<Client><ID>' + account.to_s + '</ID></Client>' if account
+      subscriber_object +=  user[:lists].join('') if user[:lists]
+      subscriber_object +=  '<FirstName>' + user[:first_name].to_s + '</FirstName>' if user[:first_name]
+      subscriber_object +=  '<LastName>' + user[:last_name].to_s + '</LastName>' if user[:last_name]
+      subscriber_object +=  '<EmailAddress>' + user[:email] + '</EmailAddress>'
+    end
+    
+    def list_object(list_id)
+      '<Lists>
+        <PartnerKey xsi:nil="true">
         </PartnerKey>
         <ID>' + list_id.to_s + '</ID>
         <ObjectID xsi:nil="true">
-        </ObjectID>'
-      end
+        </ObjectID>
+      </Lists>'
+    end
+
+    subscriber_object += '</Objects>'
   end
 end
