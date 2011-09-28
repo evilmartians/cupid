@@ -62,7 +62,7 @@ module Cupid
     end
 
     def send_email_to_list(email_id, list_id, account=nil)
-      soap_body = prepare_send_object(email_id, list_id, account)
+      soap_body = prepare_send(email_id, list_id, account)
 
       response = build_request('Create', 'CreateRequest', soap_body)
       response = Nokogiri::XML(response.http.body).remove_namespaces!
