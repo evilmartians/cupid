@@ -113,7 +113,7 @@ module Cupid
 
     private
 
-    def prepare_email(subject, body, *args)
+    def prepare_email(subject, body, args)
       options = args.extract_options!
       options[:subject] = CGI.escapeHTML subject.to_s
       options[:body] = CGI.escapeHTML body.to_s
@@ -139,7 +139,7 @@ module Cupid
                        '<CharacterSet>' + options[:character_set] + '</CharacterSet></Objects>'
     end
 
-    def prepare_folder(title, *args)
+    def prepare_folder(title, args)
       options = args.extract_options!
       options[:title] = CGI.escapeHTML title.to_s
       options[:description] ||= 'description'
