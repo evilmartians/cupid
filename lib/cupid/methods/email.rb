@@ -205,9 +205,9 @@ module Cupid
     def create_delete_email_object(email_id, account)
       '<Objects xsi:type="Email">' +
         '<Client>' +
-          '<ID>' + account + '</ID>' +
+          '<ID>' + account.to_s + '</ID>' +
         '</Client>' +
-        '<ID>' + email_id + '</ID>' +
+        '<ID>' + email_id.to_s + '</ID>' +
         '<ObjectID xsi:nil="true"/>' +
       '</Objects>'
     end
