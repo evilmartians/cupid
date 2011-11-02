@@ -1,4 +1,4 @@
-require("cupid/methods")
+require 'cupid/methods'
 
 module Cupid
   class Session

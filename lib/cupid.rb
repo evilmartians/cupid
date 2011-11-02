@@ -1,4 +1,4 @@
-require("cupid/configuration")
+require 'cupid/configuration'
 
 module Cupid
   extend Configuration
