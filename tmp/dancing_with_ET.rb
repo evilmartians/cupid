@@ -8,7 +8,7 @@ client = Savon::Client.new do
   wsdl.document = "https://webservice.s4.exacttarget.com/etframework.wsdl"
 end
 
-client.wsse.credentials "", ""
+client.wsse.credentials "xAPIUser_1056802", "welcome@2"
 client.wsse.created_at = Time.now.utc
 client.wsse.expires_at = (Time.now + 60).utc
 client.http.headers["SOAPAction"] = '"urn:example#service"'
@@ -18,24 +18,24 @@ client.http.headers["SOAPAction"] = '"urn:example#service"'
 # 1058396
 
 # [:create, :perform, :update, :schedule, :configure, :version_info, :execute, :extract, :get_system_status, :query, :delete, :retrieve, :describe]
-body = {
-  'wsdl:Objects' => {
-    'wsdl:EmailAddress' => 'wuuuuut@tester.com',
-    'wsdl:Attributes' => [
-        {"wsdl:Name" => "First Name", "wsdl:Value" => "Wuuuuut"},
-        {"wsdl:Name" => "Last Name", "wsdl:Value" => "Teeeester"},
-        {"wsdl:Name" => "Company", "wsdl:Value" => "Northern Trail Outfitters"}
-      ],
-    'wsdl:Lists' => {
-      'wsdl:ID' => '251',
-      'wsdl:Status' => 'Active'
-    },
-    :attributes! => {
-      'wsdl:Lists' => {'xsi:type' => 'wsdl:SubscriberList'}
-    }
-  
-  }
-}
+#body = {
+#  'wsdl:Objects' => {
+#    'wsdl:EmailAddress' => 'wuuuuut@tester.com',
+#    'wsdl:Attributes' => [
+#        {"wsdl:Name" => "First Name", "wsdl:Value" => "Wuuuuut"},
+#        {"wsdl:Name" => "Last Name", "wsdl:Value" => "Teeeester"},
+#        {"wsdl:Name" => "Company", "wsdl:Value" => "Northern Trail Outfitters"}
+#      ],
+#    'wsdl:Lists' => {
+#      'wsdl:ID' => '251',
+#      'wsdl:Status' => 'Active'
+#    },
+#    :attributes! => {
+#      'wsdl:Lists' => {'xsi:type' => 'wsdl:SubscriberList'}
+#    }
+#  
+#  }
+#}
 
 header = {
   'a:Action' => 'Delete',
@@ -64,18 +64,18 @@ header = {
   </o:UsernameToken>
 </o:Security>'
 # 
-body = '<RetrieveRequest>
-  <ObjectType>DataFolder</ObjectType>
-  <Properties>ID</Properties>
-  <Properties>Name</Properties>
-  <Properties>ParentFolder.ID</Properties>
-  <Properties>ParentFolder.Name</Properties>
-  <Filter xsi:type="SimpleFilterPart">
-    <Property>Account</Property>
-    <SimpleOperator>equals</SimpleOperator>
-    <Value>1058484</Value>
-  </Filter>
-</RetrieveRequest>'
+# body = '<RetrieveRequest>
+#   <ObjectType>DataFolder</ObjectType>
+#   <Properties>ID</Properties>
+#   <Properties>Name</Properties>
+#   <Properties>ParentFolder.ID</Properties>
+#   <Properties>ParentFolder.Name</Properties>
+#   <Filter xsi:type="SimpleFilterPart">
+#     <Property>Account</Property>
+#     <SimpleOperator>equals</SimpleOperator>
+#     <Value>1058484</Value>
+#   </Filter>
+# </RetrieveRequest>'
 
 body = '<RetrieveRequest>  
       <ObjectType>List</ObjectType>  
@@ -88,127 +88,127 @@ body = '<RetrieveRequest>
       </Filter>  
    </RetrieveRequest>'
    
-body = '<RetrieveRequest>
-<ClientIDs>
-<ID>1058484</ID>
-</ClientIDs>
-<ObjectType>List</ObjectType>
-<Properties>CustomerKey</Properties>
-<Properties>ID</Properties>
-</RetrieveRequest>'
-
-body = {
-  'RetrieveRequest' => {
-    'ClientIDs' => {
-      'ID' => '1058484'
-    },
-    'ObjectType' => 'List',
-    'Properties' => ['CustomerKey', 'ID']
-  }
-}
-body_noko = Nokogiri::XML::Builder.new do |xml|
-  xml.retrieve_request {
-    xml.client_ids {
-      xml.id "1058484"
-    }
-    xml.object_type "List"
-    xml.properties "CustomerKey"
-    xml.properties "ID"
-  }
-end
-
-body = '<Objects xsi:type="Send">
-<PartnerKey xsi:nil="true"/>
-<Client><ID>1058484</ID></Client>
-<ObjectID xsi:nil="true"/>
-<Email>
-<PartnerKey xsi:nil="true"/>
-<ID>565</ID>
-<ObjectID xsi:nil="true"/>
-</Email>
-<List>
-<PartnerKey xsi:nil="true"/>
-<ObjectID xsi:nil="true"/>
-<ID>354</ID>
-</List>
-</Objects>'
+# body = '<RetrieveRequest>
+# <ClientIDs>
+# <ID>1058484</ID>
+# </ClientIDs>
+# <ObjectType>List</ObjectType>
+# <Properties>CustomerKey</Properties>
+# <Properties>ID</Properties>
+# </RetrieveRequest>'
 # 
-# puts body
+# body = {
+#   'RetrieveRequest' => {
+#     'ClientIDs' => {
+#       'ID' => '1058484'
+#     },
+#     'ObjectType' => 'List',
+#     'Properties' => ['CustomerKey', 'ID']
+#   }
+# }
+# body_noko = Nokogiri::XML::Builder.new do |xml|
+#   xml.retrieve_request {
+#     xml.client_ids {
+#       xml.id "1058484"
+#     }
+#     xml.object_type "List"
+#     xml.properties "CustomerKey"
+#     xml.properties "ID"
+#   }
+# end
 # 
-# puts '-============-'
+# body = '<Objects xsi:type="Send">
+# <PartnerKey xsi:nil="true"/>
+# <Client><ID>1058484</ID></Client>
+# <ObjectID xsi:nil="true"/>
+# <Email>
+# <PartnerKey xsi:nil="true"/>
+# <ID>565</ID>
+# <ObjectID xsi:nil="true"/>
+# </Email>
+# <List>
+# <PartnerKey xsi:nil="true"/>
+# <ObjectID xsi:nil="true"/>
+# <ID>354</ID>
+# </List>
+# </Objects>'
+# # 
+# # puts body
+# # 
+# # puts '-============-'
+# # 
+# # puts body_noko.text
+# body = '<RetrieveRequest>
+# <ClientIDs>
+# <ID>1058484</ID>
+# </ClientIDs>
+# <ObjectType>DataFolder</ObjectType>
+# <Properties>ID</Properties>
+# <Properties>Name</Properties>
+# <Properties>ParentFolder.ID</Properties>
+# <Properties>ParentFolder.Name</Properties>
+# <Filter xsi:type="SimpleFilterPart">
+# <Property>ContentType</Property>
+# <SimpleOperator>like</SimpleOperator>
+# <Value>email</Value>
+# </Filter>
+# </RetrieveRequest>'
 # 
-# puts body_noko.text
-body = '<RetrieveRequest>
-<ClientIDs>
-<ID>1058484</ID>
-</ClientIDs>
-<ObjectType>DataFolder</ObjectType>
-<Properties>ID</Properties>
-<Properties>Name</Properties>
-<Properties>ParentFolder.ID</Properties>
-<Properties>ParentFolder.Name</Properties>
-<Filter xsi:type="SimpleFilterPart">
-<Property>ContentType</Property>
-<SimpleOperator>like</SimpleOperator>
-<Value>email</Value>
-</Filter>
-</RetrieveRequest>'
-
-body = '<RetrieveRequest>
-<ClientIDs>
-<ID>1058484</ID>
-</ClientIDs>
-<ObjectType>Email</ObjectType>
-<Properties>ID</Properties>
-<Properties>Name</Properties>
-<Properties>Folder</Properties>
-<Properties>CategoryID</Properties>
-<Filter xsi:type="SimpleFilterPart">
-<Property>Name</Property>
-<SimpleOperator>like</SimpleOperator>
-<Value>120911_piter_follow_up_side</Value>
-</Filter>
-</RetrieveRequest>'
-
-body = '<RetrieveRequest>
-<ClientIDs>
-<ID>1058484</ID>
-</ClientIDs>
-<ObjectType>Email</ObjectType>
-<Properties>ID</Properties>
-<Properties>Name</Properties>
-<Properties>Folder</Properties>
-<Properties>CategoryID</Properties>
-<Filter xsi:type="SimpleFilterPart">
-<Property>Name</Property>
-<SimpleOperator>like</SimpleOperator>
-<Value>120911_piter_follow_up_side</Value>
-</Filter>
-</RetrieveRequest>'
-
-body = '
-<Objects xsi:type="Email">
-<Client>
-<ID>1058484</ID>
-</Client>
-<ID>1724</ID>
-<ObjectID xsi:nil="true"/>
-</Objects>
-'
-
-html = CGI.escapeHTML('<center><h2>Way Cool Email</h2></center>')
+# body = '<RetrieveRequest>
+# <ClientIDs>
+# <ID>1058484</ID>
+# </ClientIDs>
+# <ObjectType>Email</ObjectType>
+# <Properties>ID</Properties>
+# <Properties>Name</Properties>
+# <Properties>Folder</Properties>
+# <Properties>CategoryID</Properties>
+# <Filter xsi:type="SimpleFilterPart">
+# <Property>Name</Property>
+# <SimpleOperator>like</SimpleOperator>
+# <Value>120911_piter_follow_up_side</Value>
+# </Filter>
+# </RetrieveRequest>'
+# 
+# body = '<RetrieveRequest>
+# <ClientIDs>
+# <ID>1058484</ID>
+# </ClientIDs>
+# <ObjectType>Email</ObjectType>
+# <Properties>ID</Properties>
+# <Properties>Name</Properties>
+# <Properties>Folder</Properties>
+# <Properties>CategoryID</Properties>
+# <Filter xsi:type="SimpleFilterPart">
+# <Property>Name</Property>
+# <SimpleOperator>like</SimpleOperator>
+# <Value>120911_piter_follow_up_side</Value>
+# </Filter>
+# </RetrieveRequest>'
 # 
 # body = '
-#     <Objects xsi:type="Email">  
-#        <ObjectID xsi:nil="true"/>
-#        <Client><ID>1058484</ID></Client>
-#        <CategoryID>354</CategoryID>
-#        <HTMLBody>'+html+'</HTMLBody>  
-#        <Subject>Test Subject111</Subject>  
-#        <EmailType>HTML</EmailType>  
-#        <IsHTMLPaste>true</IsHTMLPaste>  
-#     </Objects>'
-
+# <Objects xsi:type="Email">
+# <Client>
+# <ID>1058484</ID>
+# </Client>
+# <ID>1724</ID>
+# <ObjectID xsi:nil="true"/>
+# </Objects>
+# '
+# 
+# html = CGI.escapeHTML('<center><h2>Way Cool Email</h2></center>')
+# # 
+# # body = '
+# #     <Objects xsi:type="Email">  
+# #        <ObjectID xsi:nil="true"/>
+# #        <Client><ID>1058484</ID></Client>
+# #        <CategoryID>354</CategoryID>
+# #        <HTMLBody>'+html+'</HTMLBody>  
+# #        <Subject>Test Subject111</Subject>  
+# #        <EmailType>HTML</EmailType>  
+# #        <IsHTMLPaste>true</IsHTMLPaste>  
+# #     </Objects>'
+# 
 namespaces = {
   'xmlns:s'=>"http://schemas.xmlsoap.org/soap/envelope/",
   'xmlns:a'=>"http://schemas.xmlsoap.org/ws/2004/08/addressing",
@@ -219,17 +219,17 @@ namespaces = {
 }
 # 
 response = client.request :retrieve do |soap|
-  soap.input = ['DeleteRequest', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
+  soap.input = ['RetrieveRequestMsg', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
   soap.header = header
   soap.env_namespace = :s
   soap.namespaces = namespaces
   soap.body = body
 end
-# 
-# response = client.request :create do |soap|
-#   soap.input = ['CreateRequest', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
-#   soap.header = header
-#   soap.env_namespace = :s
-#   soap.namespaces = namespaces
-#   soap.body = body
-# end
+# # 
+# # response = client.request :create do |soap|
+# #   soap.input = ['CreateRequest', { 'xmlns'=>"http://exacttarget.com/wsdl/partnerAPI"}]
+# #   soap.header = header
+# #   soap.env_namespace = :s
+# #   soap.namespaces = namespaces
+# #   soap.body = body
+# # end

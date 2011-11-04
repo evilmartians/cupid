@@ -8,8 +8,7 @@ module Cupid
       :use_ssl              => true
     }
 
-    def initialize(*args)
-      options     = args.extract_options!
+    def initialize(options={})
       @username   = options[:username]    ||= Cupid.username
       @password   = options[:password]    ||= Cupid.password
       @account    = options[:account]     ||= Cupid.account
