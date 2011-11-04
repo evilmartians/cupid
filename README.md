@@ -90,7 +90,7 @@ Or manually install cupid gem: `$ gem install cupid`
 
 ## Contributors
 
-* @gazay
+* @gazay, @brainopia
 
 ## License
 
