@@ -1,4 +1,11 @@
-require "cupid/version"
+require 'cupid/version'
 
-module Cupid
+class Cupid
+  attr_reader :username, :password, :account
+
+  def initialize(username, password, account)
+    @username = username
+    @password = password
+    @account  = account
+  end
 end
