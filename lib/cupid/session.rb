@@ -7,6 +7,7 @@ module Cupid
       @password = options[:password] || Cupid.password
       @account  = options[:account]  || Cupid.account
 
+      @api_wsdl = 'https://webservice.s4.exacttarget.com/etframework.wsdl'
       @wsa_soap_s4_to = 'https://webservice.s4.exacttarget.com/Service.asmx'
     end
 
