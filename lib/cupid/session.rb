@@ -9,17 +9,9 @@ module Cupid
     }
 
     def initialize(options={})
-      @username   = options[:username]    ||= Cupid.username
-      @password   = options[:password]    ||= Cupid.password
-      @account    = options[:account]     ||= Cupid.account
-      @headers    = {"Content-Type" => "application/x-www-form-urlencoded", "Connection" => "close"}
-
-      @api_uri = @api_wsdl = DEFAULTS[:soap_s4_url]
-      @api_uri = URI.parse(@api_uri)
-      @api_url = Net::HTTP.new(@api_uri.host, @api_uri.port)
-
-      @api_url.use_ssl = DEFAULTS[:use_ssl]
-      @wsa_soap_s4_to = DEFAULTS[:wsa_soap_s4_to]
+      @username   = options[:username] || Cupid.username
+      @password   = options[:password] || Cupid.password
+      @account    = options[:account]  || Cupid.account
     end
 
     private
