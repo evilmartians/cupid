@@ -2,16 +2,12 @@ require 'cupid/methods'
 
 module Cupid
   class Session
-    DEFAULTS = {
-      :soap_s4_url          => "https://webservice.s4.exacttarget.com/etframework.wsdl",
-      :wsa_soap_s4_to       => "https://webservice.s4.exacttarget.com/Service.asmx",
-      :use_ssl              => true
-    }
-
     def initialize(options={})
-      @username   = options[:username] || Cupid.username
-      @password   = options[:password] || Cupid.password
-      @account    = options[:account]  || Cupid.account
+      @username = options[:username] || Cupid.username
+      @password = options[:password] || Cupid.password
+      @account  = options[:account]  || Cupid.account
+
+      @wsa_soap_s4_to = 'https://webservice.s4.exacttarget.com/Service.asmx'
     end
 
     private
