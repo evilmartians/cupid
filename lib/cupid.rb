@@ -15,7 +15,6 @@ class Cupid
   def get_client(username, password)
     Savon::Client.new(WSDL).tap do |client|
       client.wsse.credentials username, password
-      client.wsse.timestamp = true
     end
   end
 end
