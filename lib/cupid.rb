@@ -1,24 +1,40 @@
 require 'savon'
-require 'cupid/version'
+Dir[File.expand_path '../cupid/*.rb', __FILE__].each &method(:require)
 
 class Cupid
-  ET_NAMESPACE = 'http://exacttarget.com/wsdl/partnerAPI'
-  ET_ENDPOINT  = 'https://webservice.s4.exacttarget.com/Service.asmx'
+  NAMESPACE = 'http://exacttarget.com/wsdl/partnerAPI'
+  ENDPOINT  = 'https://webservice.s4.exacttarget.com/Service.asmx'
+
+  include Filter, Retrieve
 
   attr_reader :client, :account
 
   def initialize(username, password, account)
-    @client  = get_client username, password
+    @client  = client_with username, password
     @account = account
+  end
+
+  def request(action, options={}, &block)
+    client.request(action, options) {
+      soap.input = Input.for action
+      client.send :process, &block if block
+    }.body
+  end
+
+  def post(action, xml)
+    request(action) { soap.body = xml }
   end
 
   private
 
-  def get_client(username, password)
+  def client_with(username, password)
     Savon::Client.new.tap do |client|
-      client.wsdl.namespace = ET_NAMESPACE
-      client.wsdl.endpoint  = ET_ENDPOINT
+      client.wsdl.namespace = NAMESPACE
+      client.wsdl.endpoint  = ENDPOINT
       client.wsse.credentials username, password
     end
   end
 end
+
+# ExactTarget follows camelcase convention for soap objects
+Gyoku.convert_symbols_to :camelcase
