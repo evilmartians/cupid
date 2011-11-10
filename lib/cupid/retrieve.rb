@@ -11,22 +11,22 @@ class Cupid
       }.merge(options)
     end
 
-    def retrieve_email_folders(fields = EMAIL_FOLDER_FIELDS)
+    def email_folders(fields = EMAIL_FOLDER_FIELDS)
       retrieve 'DataFolder', fields, filter_email_folders
     end
 
-    def retrieve_emails(name=nil, fields = EMAIL_FIELDS)
+    def emails(name=nil, fields = EMAIL_FIELDS)
       retrieve 'Email', fields, filter_email_like(name)
     end
 
     private
 
     def filter_email_folders
-      filter 'ContentType', 'like', 'email'
+      Filter.for 'ContentType', 'like', 'email'
     end
 
     def filter_email_like(name)
-      filter 'Name', 'like', name
+      Filter.for 'Name', 'like', name
     end
   end
 end

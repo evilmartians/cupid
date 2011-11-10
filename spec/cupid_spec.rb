@@ -7,7 +7,7 @@ describe Cupid do
   its(:account) { should == 42 }
 
   def stub_input(value)
-    Cupid::Input.stub(:for).with(:action).and_return [value]
+    Cupid::Node.stub(:input).with(:action).and_return [value]
   end
 
   def soap_should_receive(text)

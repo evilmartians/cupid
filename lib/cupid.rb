@@ -5,7 +5,7 @@ class Cupid
   NAMESPACE = 'http://exacttarget.com/wsdl/partnerAPI'
   ENDPOINT  = 'https://webservice.s4.exacttarget.com/Service.asmx'
 
-  include Filter, Retrieve
+  include Create, Retrieve
 
   attr_reader :client, :account
 
@@ -16,7 +16,7 @@ class Cupid
 
   def request(action, options={}, &block)
     client.request(action, options) {
-      soap.input = Input.for action
+      soap.input = Node.input action
       client.send :process, &block if block
     }.body
   end
