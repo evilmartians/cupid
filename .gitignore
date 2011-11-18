@@ -1,3 +1,4 @@
+.test_account
 *.gem
 *.rbc
 .bundle
@@ -12,6 +13,4 @@ lib/bundler/man
 pkg
 rdoc
 spec/reports
-test/tmp
-test/version_tmp
 tmp

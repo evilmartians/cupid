@@ -1,32 +1,42 @@
 class Cupid
   module Retrieve
-    EMAIL_FIELDS        = %w(ID Name)
-    EMAIL_FOLDER_FIELDS = %w(ID Name ParentFolder.ID ParentFolder.Name)
-
-    def retrieve(type, fields, options={})
-      post :retrieve, :retrieve_request => {
-        :object_type => type,
-        :properties => fields,
-        'ClientIDs' => { 'ID' => account }
-      }.merge(options)
-    end
-
-    def email_folders(fields = EMAIL_FOLDER_FIELDS)
-      retrieve 'DataFolder', fields, filter_email_folders
-    end
+    LIST_FIELDS     = %w(ID CustomerKey)
+    EMAIL_FIELDS    = %w(ID Name)
+    FOLDER_FIELDS   = %w(ID Name ParentFolder.ID ParentFolder.Name)
+    DELIVERY_FIELDS = %w(ID Status)
 
     def emails(name=nil, fields = EMAIL_FIELDS)
       retrieve 'Email', fields, filter_email_like(name)
     end
 
+    def folders(fields = FOLDER_FIELDS)
+      retrieve 'DataFolder', fields, filter_folders
+    end
+
+    def lists(fields = LIST_FIELDS)
+      retrieve 'List', fields
+    end
+
+    def deliveries(fields = DELIVERY_FIELDS)
+      retrieve 'Send', fields
+    end
+
     private
 
-    def filter_email_folders
-      Filter.for 'ContentType', 'like', 'email'
+    def retrieve(type, fields, options={})
+      post :retrieve, :retrieve_request => {
+        :object_type => type,
+        :properties => fields,
+        'ClientIDs' => { 'ID' => server.account }
+      }.merge(options)
+    end
+
+    def filter_folders
+      server.filter 'ContentType', 'like', 'email'
     end
 
     def filter_email_like(name)
-      Filter.for 'Name', 'like', name
+      server.filter 'Name', 'like', name
     end
   end
 end

@@ -1,19 +1,22 @@
-describe Cupid::Node do
+describe Cupid::Server do
+  subject { Cupid::Server.new 'account' }
+
+  its(:account) { 'account' }
+
   context '#input' do
-    subject { Cupid::Node.input action }
+    let(:input) { subject.input action }
 
     context '#for :get_system_status action' do
       let(:action) { :get_system_status }
       let(:tag_name) { 'SystemStatusRequestMsg' }
 
-      it { should == [tag_name, :xmlns => Cupid::NAMESPACE] }
+      it { input.should == [tag_name, :xmlns => Cupid::NAMESPACE] }
     end
 
     context '#for :unexisting action' do
       let(:action) { :unexisting }
-      let(:input_creation) { lambda { subject }}
 
-      it { input_creation.should raise_error }
+      it { expect { input }.to raise_error }
     end
   end
 end
