@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Create, organize and send emails through Exact Target SOAP API'
   s.description = 'Send love, not war. This version of cupid works with ET SOAP API s4.'
 
-  s.add_dependency 'builder',   '~> 2'
+  s.add_dependency 'builder',   '>= 2'
   s.add_dependency 'nokogiri',  '~> 1'
   s.add_dependency 'savon',     '~> 0.9'
 
