@@ -16,6 +16,7 @@ it's the only one):
 Now you can send requests to ExactTarget through this object.
 
 Small example:
+
 ``` ruby
   Cupid::MyAccount.tap do |it|
     list = it.lists.last
