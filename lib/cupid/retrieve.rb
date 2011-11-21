@@ -1,6 +1,6 @@
 class Cupid
   module Retrieve
-    LIST_FIELDS     = %w(ID CustomerKey)
+    LIST_FIELDS     = %w(ID ListName CustomerKey)
     EMAIL_FIELDS    = %w(ID Name)
     FOLDER_FIELDS   = %w(ID Name ParentFolder.ID ParentFolder.Name)
     DELIVERY_FIELDS = %w(ID Status)

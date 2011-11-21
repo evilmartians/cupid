@@ -28,10 +28,10 @@ describe Cupid::Create do
   end
 
   context '#create_delivery' do
-    let(:email)     { subject.emails.last[:id] }
-    let(:list)      { subject.lists.last[:id] }
+    let(:email)     { subject.emails.last }
+    let(:list)      { subject.lists.find {|it| it[:list_name] == 'Test send' }}
     let(:items)     { :deliveries }
-    let(:creation)  { subject.create_delivery email, list }
+    let(:creation)  { subject.create_delivery email[:id], list[:id] }
 
     it_should_behave_like :creation
   end
