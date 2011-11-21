@@ -15,7 +15,7 @@ class Cupid
     end
 
     def input(action)
-      [INPUT_NAMES.fetch(action), :xmlns => Cupid::NAMESPACE]
+      [INPUT_NAMES.fetch(action), { :xmlns => Cupid::NAMESPACE }]
     end
 
     def filter(field, operator, value)
