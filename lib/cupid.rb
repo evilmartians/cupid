@@ -1,5 +1,5 @@
 require 'savon'
-Dir[File.expand_path '../cupid/*.rb', __FILE__].each &method(:require)
+Dir[File.expand_path '../cupid/*.rb', __FILE__].each {|it| require it }
 
 class Cupid
   NAMESPACE = 'http://exacttarget.com/wsdl/partnerAPI'
