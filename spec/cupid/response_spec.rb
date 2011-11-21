@@ -10,6 +10,12 @@ describe Cupid::Response do
     Cupid::Response.new double 'savon-response', :body => savon_body
   end
 
+  context '.ok' do
+    subject { Cupid::Response.ok }
+    its(:success?) { should be true }
+    its(:result) { should == [] }
+  end
+
   context 'success' do
     let(:status) { 'OK' }
     let(:result) { [:object] }

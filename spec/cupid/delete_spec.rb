@@ -9,6 +9,7 @@ describe Cupid::Delete do
     it { deletion.should be_success }
     it { subject.emails.each {|it| it.should_not include(:id => email_id) }}
   end
+
   context '#delete_emails' do
     let(:deletion) { subject.delete_emails [email_id] }
     it_should_behave_like 'deletion'

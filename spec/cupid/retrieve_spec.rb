@@ -5,4 +5,6 @@ describe Cupid::Retrieve do
   its(:emails)      { should be_success }
   its(:lists)       { should be_success }
   its(:deliveries)  { should be_success }
+
+  it { subject.emails('unexisting name').result.should == [] }
 end
