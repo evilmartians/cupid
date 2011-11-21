@@ -6,7 +6,7 @@ describe Cupid::Create do
   end
 
   shared_examples_for :creation do
-    it { creation.should be_success }
+    it { creation.should be }
     it { expect { creation }.to change { subject.send(items).size }.by 1 }
   end
 

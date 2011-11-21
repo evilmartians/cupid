@@ -6,7 +6,7 @@ describe Cupid::Delete do
     let(:email_id) { email[:new_id] }
     let(:email_name) { 'subject' }
 
-    it { deletion.should be_success }
+    it { deletion.should be }
     it { subject.emails.each {|it| it.should_not include(:id => email_id) }}
   end
 

@@ -12,7 +12,7 @@ describe Cupid::Response do
 
   context '.ok' do
     subject { Cupid::Response.ok }
-    its(:success?) { should be true }
+
     its(:result) { should == [] }
   end
 
@@ -20,7 +20,6 @@ describe Cupid::Response do
     let(:status) { 'OK' }
     let(:result) { [:object] }
 
-    its(:success?) { should be true }
     its(:result) { should == [:object] }
     its(:first) { should == :object }
     its(:size) { should == 1 }
@@ -30,7 +29,6 @@ describe Cupid::Response do
     let(:status) { 'Error' }
     let(:result) {{ :status_message => 'Bad request' }}
 
-    its(:success?) { should be false }
-    it { expect { subject.result }.to raise_exception(Cupid::Response::Error) }
+    it { expect { subject }.to raise_exception(Cupid::Response::Error) }
   end
 end

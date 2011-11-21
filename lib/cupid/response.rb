@@ -7,19 +7,15 @@ class Cupid
     Error = Class.new StandardError
 
     def self.ok
-      allocate.tap {|it| it.body = { :overall_status => 'OK' }}
+      allocate.tap {|it| it.body = {} }
     end
 
     def initialize(savon_response)
       @body = savon_response.body.values.first
-    end
-
-    def success?
-      status == 'OK'
+      raise_unless_success
     end
 
     def result
-      raise_unless_success
       body[:results] || []
     end
 
@@ -38,7 +34,9 @@ class Cupid
     end
 
     def raise_unless_success
-      raise Error, body[:results][:status_message] unless success?
+      unless status == 'OK'
+        raise Error, body[:results][:status_message]
+      end
     end
   end
 end

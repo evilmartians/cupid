@@ -8,6 +8,14 @@ class Cupid
       create 'DataFolder', folder(title, parent, options)
     end
 
+    def create_path(*folder_names)
+      all = folders
+      folder_names.inject(0) do |parent_id, name|
+        next if all.find {|it| it[:name] == name and it[:parent_id] == parent_id }
+        create_folder name, parent_id
+      end
+    end
+
     def create_email(title, body, options={})
       create 'Email', email(title, body, options)
     end
