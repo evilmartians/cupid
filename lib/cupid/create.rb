@@ -53,7 +53,8 @@ class Cupid
         :subject       => title,
         'HTMLBody'     => body,
         :email_type    => 'HTML',
-        :character_set => 'utf-8'
+        :character_set => 'utf-8',
+        'IsHTMLPaste'  => true
       }.merge options
     end
 
