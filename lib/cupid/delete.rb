@@ -5,7 +5,10 @@ class Cupid
     end
 
     def delete_emails_like(name)
-      ids = emails(name).map {|it| it[:id] }
+      # TODO: REFACTOR ME
+      response = emails name
+      response = [response.result] if response.result.is_a? Hash
+      ids = response.map {|it| it[:id] }
       ids.empty? ? Response.ok : delete_emails(ids)
     end
   end

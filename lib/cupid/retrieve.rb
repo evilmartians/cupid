@@ -5,19 +5,19 @@ class Cupid
     FOLDER_FIELDS   = %w(ID Name ParentFolder.ID ParentFolder.Name)
     DELIVERY_FIELDS = %w(ID Status)
 
-    def emails(name=nil, fields = EMAIL_FIELDS)
+    def emails(name=nil, fields=EMAIL_FIELDS)
       retrieve 'Email', fields, filter_email_like(name)
     end
 
-    def folders(fields = FOLDER_FIELDS)
+    def folders(fields=FOLDER_FIELDS)
       retrieve 'DataFolder', fields, filter_folders
     end
 
-    def lists(fields = LIST_FIELDS)
+    def lists(fields=LIST_FIELDS)
       retrieve 'List', fields
     end
 
-    def deliveries(fields = DELIVERY_FIELDS)
+    def deliveries(fields=DELIVERY_FIELDS)
       retrieve 'Send', fields
     end
 
