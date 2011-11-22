@@ -43,7 +43,18 @@ class Cupid
     end
 
     def emails(ids)
-      ids.map {|it| object 'Email', 'ID' => it }
+      # TODO: REFACTOR ME
+      {
+        :objects => ids.map {|it|
+          {
+            :client => { 'ID' => account },
+            'ID' => it
+          }
+        },
+        :attributes! => {
+          :objects => { 'xsi:type' => 'Email' }
+        }
+      }
     end
   end
 end
