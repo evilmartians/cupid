@@ -8,14 +8,6 @@ class Cupid
       create 'DataFolder', folder(title, parent, options)
     end
 
-    def create_path(*folder_names)
-      all = folders
-      folder_names.inject(0) do |parent_id, name|
-        next if all.find {|it| it[:name] == name and it[:parent_id] == parent_id }
-        create_folder name, parent_id
-      end
-    end
-
     def create_email(title, body, options={})
       create 'Email', email(title, body, options)
     end
@@ -24,11 +16,26 @@ class Cupid
       create 'Send', delivery(email, list)
     end
 
+    def create_path(*folder_names)
+      # TODO: REFACTOR ME BY SPECIALISING RESPONSE RESULTS WITH TYPE
+      # AND ADD SPEC COVERAGE FOR THIS METHOD
+      all = folders
+      folder_names.inject(0) do |parent_id, name|
+        existing_folder = all.find do |it|
+          it[:name] == name and it[:parent_folder][:id] == parent_id.to_s
+        end
+        if existing_folder
+          existing_folder[:id]
+        else
+          create_folder(name, parent_id)[:new_id]
+        end
+      end
+    end
+
     private
 
     def folder(title, parent, options)
       {
-        :customer_key   => title,
         :name           => title,
         :content_type   => :email,
         :description    => nil,
