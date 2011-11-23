@@ -31,30 +31,25 @@ class Cupid
       }
     end
 
-    def object(type, options)
+    def objects(type, objects)
       {
-        :objects => {
-          :client => { 'ID' => account }
-        }.merge(options),
+        :objects => objects.map {|object|
+          {
+            :client => { 'ID' => account },
+          }.merge(object)
+        },
         :attributes! => {
-          :objects => { 'xsi:type' => type.to_s.camelcase }
+          :objects => { 'xsi:type' => type }
         }
       }
     end
 
+    def object(type, options)
+      objects type, [options]
+    end
+
     def emails(ids)
-      # TODO: REFACTOR ME
-      {
-        :objects => ids.map {|it|
-          {
-            :client => { 'ID' => account },
-            'ID' => it
-          }
-        },
-        :attributes! => {
-          :objects => { 'xsi:type' => 'Email' }
-        }
-      }
+      objects 'Email', ids.map {|it| { 'ID' => it }}
     end
   end
 end
