@@ -8,10 +8,26 @@ describe Cupid::Response::Data do
     }
   }}
 
-  describe 'response with error' do
-    let(:status) { 'error' }
-    let(:result) {{ :status_message => 'bad request' }}
-    it { expect { subject }.to raise_exception described_class::Error }
+  describe 'unsuccessful response' do
+    let(:status) { 'some error' }
+
+    shared_examples_for 'response error' do
+      it { expect { subject }.to raise_exception described_class::Error, error_text }
+    end
+
+    context 'with status message' do
+      let(:result) {{ :status_message => error_text }}
+      let(:error_text) { 'bad_request' }
+
+      it_should_behave_like 'response error'
+    end
+
+    context 'without status message' do
+      let(:result) { nil }
+      let(:error_text) { status }
+
+      it_should_behave_like 'response error'
+    end
   end
 
   describe 'successful reponse' do
