@@ -35,6 +35,3 @@ class Cupid
     end
   end
 end
-
-# ExactTarget follows camelcase convention for soap objects
-Gyoku.convert_symbols_to :camelcase
