@@ -1,5 +1,5 @@
 class Cupid
-  class Response
+  module Response
     class Data
       Error = Class.new StandardError
 
@@ -13,7 +13,7 @@ class Cupid
       end
 
       def results
-        [body[:results]].compact.flatten
+        [raw_results].compact.flatten
       end
 
       private
@@ -36,8 +36,12 @@ class Cupid
         body[:overall_status]
       end
 
+      def raw_results
+        body[:results]
+      end
+
       def error_message
-        body[:results][:status_message]
+        raw_results ? raw_results[:status_message] : status
       end
     end
   end
