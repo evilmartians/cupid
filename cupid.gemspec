@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'savon',     '~> 0.9'
 
   s.add_development_dependency 'rspec', '~> 2'
-  s.add_development_dependency 'webmock', '~> 1'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

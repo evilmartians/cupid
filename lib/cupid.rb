@@ -14,18 +14,18 @@ class Cupid
     @server = Server.new account
   end
 
-  def request(action, options={}, &block)
-    client.request(action, options) do
-      soap.input = server.input action
-      client.send :process, &block if block
-    end
-  end
-
-  def post(action, xml)
-    Response.new(request(action) { soap.body = xml })
+  def request(action, xml)
+    Response.new raw_request(action, xml).body
   end
 
   private
+
+  def raw_request(action, xml)
+    client.request action do
+      soap.input = server.input action
+      soap.body  = xml
+    end
+  end
 
   def client_with(username, password)
     Savon::Client.new.tap do |client|

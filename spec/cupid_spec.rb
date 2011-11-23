@@ -5,20 +5,4 @@ describe Cupid do
   its('client.wsse.username') { should == 'bob' }
   its('client.wsse.password') { should == 'x123' }
   its('server.account')       { should == 42 }
-
-  def stub_input(value)
-    subject.server.stub(:input).with(:action).and_return [value]
-  end
-
-  def soap_should_receive(text)
-    stub_request(:post, Cupid::ENDPOINT).
-      with(:body => /#{text}/).
-      to_return(:body => Savon::SOAP::XML.new.to_xml)
-  end
-
-  it 'uses correct input' do
-    stub_input :correct_input
-    soap_should_receive :correct_input
-    subject.request :action
-  end
 end

@@ -1,7 +1,7 @@
 class Cupid
   module Create
     def create(type, data)
-      post :create, server.object(type, data)
+      request :create, server.object(type, data)
     end
 
     def create_folder(title, parent, options={})
@@ -50,10 +50,10 @@ class Cupid
 
     def email(title, body, options)
       {
-        :subject       => title,
-        'HTMLBody'     => body,
         :email_type    => 'HTML',
         :character_set => 'utf-8',
+        :subject       => title,
+        'HTMLBody'     => body,
         'IsHTMLPaste'  => true
       }.merge options
     end

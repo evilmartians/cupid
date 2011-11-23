@@ -1,7 +1,4 @@
-require 'webmock/rspec'
 require 'cupid'
-
-WebMock.allow_net_connect!
 
 Savon.log = false
 HTTPI.log = false

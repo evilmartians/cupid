@@ -7,11 +7,11 @@ describe Cupid::Response do
   }}
 
   subject do
-    Cupid::Response.new double 'savon-response', :body => savon_body
+    Cupid::Response.new savon_body
   end
 
-  context '.ok' do
-    subject { Cupid::Response.ok }
+  context '.empty' do
+    subject { Cupid::Response.empty }
 
     its(:result) { should == [] }
   end

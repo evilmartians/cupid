@@ -1,18 +1,17 @@
 class Cupid
   class Response
     include Enumerable
-
-    attr_accessor :body
-
     Error = Class.new StandardError
 
-    def self.ok
-      allocate.tap {|it| it.body = {} }
+    attr_reader :body
+
+    def self.empty
+      new :body => { :overall_status => 'OK' }
     end
 
-    def initialize(savon_response)
-      @body = savon_response.body.values.first
-      raise_unless_success
+    def initialize(wrapped_body)
+      extract wrapped_body
+      check_errors!
     end
 
     def result
@@ -30,13 +29,19 @@ class Cupid
     private
 
     def status
-      @body[:overall_status]
+      body[:overall_status]
     end
 
-    def raise_unless_success
-      unless status == 'OK'
-        raise Error, body[:results][:status_message]
-      end
+    def error_message
+      body[:results][:status_message]
+    end
+
+    def check_errors!
+      raise Error.new error_message unless status == 'OK'
+    end
+
+    def extract(wrapped_body)
+      @body = wrapped_body.values.first
     end
   end
 end
