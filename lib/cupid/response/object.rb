@@ -16,7 +16,13 @@ class Cupid
       end
 
       def [](attribute)
-        data[attribute] || data[:object][attribute]
+        data[attribute] || subdata[attribute]
+      end
+
+      private
+
+      def subdata
+        data[:object] || {}
       end
     end
   end
