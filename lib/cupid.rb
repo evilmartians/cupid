@@ -1,5 +1,5 @@
 require 'savon'
-Dir[File.expand_path '../cupid/*.rb', __FILE__].each {|it| require it }
+Dir[File.expand_path '../cupid/**/*.rb', __FILE__].each {|it| require it }
 
 class Cupid
   NAMESPACE = 'http://exacttarget.com/wsdl/partnerAPI'
@@ -15,7 +15,7 @@ class Cupid
   end
 
   def request(action, xml)
-    Response.new raw_request(action, xml).body
+    Response.parse raw_request(action, xml).body
   end
 
   private

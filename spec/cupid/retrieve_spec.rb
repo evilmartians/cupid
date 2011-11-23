@@ -6,5 +6,5 @@ describe Cupid::Retrieve do
   its(:lists)       { should be }
   its(:deliveries)  { should be }
 
-  it { subject.emails('unexisting name').result.should == [] }
+  it { subject.emails('unexisting name').should == [] }
 end
