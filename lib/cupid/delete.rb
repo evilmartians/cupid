@@ -1,12 +1,12 @@
 class Cupid
   module Delete
-    def delete_emails(ids)
-      request :delete, server.emails(ids)
+    def delete_emails(*objects)
+      request :delete, server.emails(objects)
     end
 
     def delete_emails_like(name)
-      ids = emails(name).map {|it| it[:id] }
-      ids.empty? ? [] : delete_emails(ids)
+      objects = emails(name)
+      objects.empty? ? [] : delete_emails(*objects)
     end
   end
 end

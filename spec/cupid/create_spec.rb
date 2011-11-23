@@ -11,7 +11,7 @@ describe Cupid::Create do
   end
 
   context '#create_folder' do
-    let(:parent)    { subject.folders.first[:id] }
+    let(:parent)    { subject.folders.first }
     let(:name)      { uniq_name :folder }
     let(:items)     { :folders }
     let(:creation)  { subject.create_folder name, parent }
@@ -31,7 +31,7 @@ describe Cupid::Create do
     let(:email)     { subject.emails.last }
     let(:list)      { subject.lists.find {|it| it[:list_name] == 'Test send' }}
     let(:items)     { :deliveries }
-    let(:creation)  { subject.create_delivery email[:id], list[:id] }
+    let(:creation)  { subject.create_delivery email, list }
 
     it_should_behave_like :creation
   end

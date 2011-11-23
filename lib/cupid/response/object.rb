@@ -19,6 +19,16 @@ class Cupid
         data[attribute] || subdata[attribute]
       end
 
+      # Hook into gyoku
+      def call
+        id
+      end
+
+      def ==(object)
+        return false unless object.is_a?(Cupid::Response::Object)
+        id ? id == object.id : data == object.data
+      end
+
       private
 
       def subdata

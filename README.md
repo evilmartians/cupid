@@ -21,8 +21,8 @@ Small example:
   Cupid::MyAccount.tap do |it|
     list = it.lists.last
     new_email = it.create_email :subject, :body
-    it.create_delivery list[:id], new_email[:new_id]
-    it.delete_emails it.emails.map {|it| it[:id] }
+    it.create_delivery list, new_email
+    it.delete_emails it.emails
   end
 ```
 

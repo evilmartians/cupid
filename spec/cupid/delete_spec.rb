@@ -3,15 +3,14 @@ describe Cupid::Delete do
 
   shared_examples_for 'deletion' do
     let(:email) { subject.create_email email_name, 'body' }
-    let(:email_id) { email[:new_id] }
     let(:email_name) { 'subject' }
 
     it { deletion.should be }
-    it { subject.emails.map(&:id).should_not include(email_id) }
+    it { subject.emails.should_not include(email) }
   end
 
   context '#delete_emails' do
-    let(:deletion) { subject.delete_emails [email_id] }
+    let(:deletion) { subject.delete_emails email }
     it_should_behave_like 'deletion'
   end
 
