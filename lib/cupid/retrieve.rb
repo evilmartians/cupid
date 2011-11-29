@@ -10,7 +10,11 @@ class Cupid
     end
 
     def folders(*fields)
-      retrieve 'DataFolder', FOLDER_FIELDS + fields, filter_folders
+      data_folders 'email', *fields
+    end
+
+    def ui_folders(*fields)
+      data_folders 'userinitiated', *fields
     end
 
     def lists(*fields)
@@ -31,8 +35,12 @@ class Cupid
       }.merge(options)
     end
 
-    def filter_folders
-      server.filter 'ContentType', 'like', 'email'
+    def data_folders(type, *fields)
+      retrieve 'DataFolder', FOLDER_FIELDS + fields, filter_folders(type)
+    end
+
+    def filter_folders(type)
+      server.filter 'ContentType', 'like', type
     end
 
     def filter_email_like(name)
