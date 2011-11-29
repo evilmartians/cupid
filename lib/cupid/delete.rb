@@ -1,7 +1,7 @@
 class Cupid
   module Delete
     def delete_emails(*objects)
-      request :delete, server.emails(objects)
+      resources :delete, server.emails(objects)
     end
 
     def delete_emails_like(name)

@@ -24,7 +24,7 @@ class Cupid
     private
 
     def retrieve(type, fields, options={})
-      request :retrieve, :retrieve_request => {
+      resources :retrieve, :retrieve_request => {
         :object_type => type,
         :properties => fields,
         'ClientIDs' => { 'ID' => server.account }

@@ -14,8 +14,12 @@ class Cupid
     @server = Server.new account
   end
 
-  def request(action, xml)
+  def resources(action, xml)
     Response.parse raw_request(action, xml).body
+  end
+
+  def resource(*args)
+    resources(*args).first
   end
 
   private

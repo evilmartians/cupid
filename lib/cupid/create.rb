@@ -1,7 +1,7 @@
 class Cupid
   module Create
     def create(type, data)
-      request(:create, server.object(type, data)).first
+      resource :create, server.object(type, data)
     end
 
     def create_folder(title, parent, options={})
