@@ -51,5 +51,9 @@ class Cupid
     def emails(ids)
       objects 'Email', ids.map {|it| { 'ID' => it }}
     end
+
+    def folders(ids)
+      objects 'DataFolder', ids.map {|it| { 'ID' => it }}
+    end
   end
 end

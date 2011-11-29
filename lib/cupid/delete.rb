@@ -1,5 +1,10 @@
 class Cupid
   module Delete
+    # TODO: refactor
+    def delete_folders(*objects)
+      resources :delete, server.folders(objects)
+    end
+
     def delete_emails(*objects)
       resources :delete, server.emails(objects)
     end
