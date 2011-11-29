@@ -22,13 +22,11 @@ Small example:
     list = it.lists.last
     new_email = it.create_email :subject, :body
     it.create_delivery list, new_email
-    it.delete_emails it.emails
+    it.delete_emails *it.emails
   end
 ```
 
-Not too much sugar aside from abiding to ruby conventions, but it let you use ExactTarget api from ruby without too much hassle.
-
-See specs for more examples.
+There is much more underneath. See specs for some examples.
 
 ## Installation
 
