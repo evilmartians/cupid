@@ -1,22 +1,21 @@
 class Cupid
   module Response
     class Object
+      def self.fields(*names)
+        names.each do |name|
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+            def #{name}
+              data[:#{name}]
+            end
+          RUBY
+        end
+      end
+
       attr_reader :data
+      fields :id
 
       def initialize(data)
         @data = data
-      end
-
-      def type
-        self[:'@xsi:type']
-      end
-
-      def id
-        data[:id] || data[:new_id]
-      end
-
-      def [](attribute)
-        data[attribute] || subdata[attribute]
       end
 
       # Hook into gyoku
@@ -24,15 +23,17 @@ class Cupid
         id
       end
 
-      def ==(object)
-        return false unless object.is_a?(Cupid::Response::Object)
-        id ? id == object.id : data == object.data
+      def type
+        instance_of?(Object) ? self[:type] : self.class
       end
 
-      private
+      def ==(object)
+        return false unless object.is_a? Cupid::Response::Object
+        id and [id, type] == [object.id, object.type]
+      end
 
-      def subdata
-        data[:object] || {}
+      def [](field)
+        data[field]
       end
     end
   end
