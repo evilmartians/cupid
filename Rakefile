@@ -7,5 +7,5 @@ task :clean_et do
   require './spec/spec_helper'
   api = Cupid::Test
   api.delete_emails *api.emails
-  api.delete_folders *api.folders.select(&:parent)
+  api.delete_folders *api.folders.reject(&:root?)
 end

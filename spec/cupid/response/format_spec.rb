@@ -8,19 +8,24 @@ describe Cupid::Response::Format, '.apply' do
     apply(simple_data).should include :a => 1
   end
 
-  context 'contains new_id' do
-    it 'should use new_id if id is missing' do
-      new_data = { :new_id => 42 }
-      apply(new_data).should include :id => 42
-    end
-
-    it 'should not use new_id if id is present' do
-      old_data = { :new_id => 42, :id => 239 }
-      apply(old_data).should include :id => 239
-    end
+  it 'should rename specified fields' do
+    described_class::RENAME[:old] = :new
+    data_with_renaming = { :old => 33 }
+    apply(data_with_renaming).should include :new => 33
   end
 
-  context 'contains nested definition' do
+  it 'should delete ignore fields' do
+    described_class::IGNORE << :extra
+    data_with_deletion = { :extra => 103 }
+    apply(data_with_deletion).should_not include :extra
+  end
+
+  it 'should delete empty parents' do
+    data_with_empty_parent = { :parent_data => { :id => '0' }}
+    apply(data_with_empty_parent).should_not include :parent_data
+  end
+
+  context 'contains nested data' do
     it 'should extract nested object to the top level' do
       nested_data = { :a => 1, :object => { :b => 2 }}
       apply(nested_data).should include :a => 1, :b => 2
@@ -30,12 +35,11 @@ describe Cupid::Response::Format, '.apply' do
       new_nested_data = { :object => { :new_id => 24 }}
       apply(new_nested_data).should include :id => 24
     end
-  end
 
-  context 'contains xsi data' do
-    it 'should drop xsi prefix' do
-      xsi_data = { :'@xsi:type' => :object }
-      apply(xsi_data).should include :type => :object
+    it 'should delete ignored fields' do
+      described_class::IGNORE << :nested_extra
+      nested_data_with_deletion = { :nexted_extra => 17 }
+      apply(nested_data_with_deletion).should_not include :nested_extra
     end
   end
 end

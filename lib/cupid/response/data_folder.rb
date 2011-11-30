@@ -6,7 +6,7 @@ class Cupid
       ALL = []
 
       attr_reader :parent, :children
-      fields :parent_folder, :name
+      fields :parent_data, :name
 
       def self.new(data)
         find(data[:id]) || super
@@ -16,20 +16,40 @@ class Cupid
         ALL.find {|it| it.id == id }
       end
 
-      # TODO: refactor
       def initialize(data)
         super
+        assign_children
+        extract_parent
+        add_to_identity_map
+      end
+
+      def root?
+        not parent
+      end
+
+      private
+
+      def assign_children
         @children = ALL.select {|it| it.parent == self }
-        parent.children << self if parent
+      end
+
+      def extract_parent
+        if parent_data
+          create_parent
+          attach_to_parent
+        end
+      end
+
+      def add_to_identity_map
         ALL << self
       end
 
-      def parent
-        @parent ||= begin
-          if parent_folder and parent_folder[:id] != '0'
-            self.class.new parent_folder
-          end
-        end
+      def create_parent
+        @parent = self.class.new parent_data
+      end
+
+      def attach_to_parent
+        parent.children << self
       end
     end
   end

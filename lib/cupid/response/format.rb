@@ -1,7 +1,12 @@
 class Cupid
   module Response
     class Format
-      IGNORED_FIELDS = [:partner_key, :object_id]
+      IGNORE = [:partner_key, :object_id]
+      RENAME = {
+        :new_id        => :id,
+        :'@xsi:type'   => :type,
+        :parent_folder => :parent_data
+      }
 
       def self.apply(data)
         formatted = new data
@@ -12,31 +17,36 @@ class Cupid
 
       def initialize(data)
         @data = data
-        extract_nested
-        unify_id
-        drop_xsi_prefix
+        extract_nested_data
+        rename_fields
         delete_ignored_fields
+        delete_empty_parents
       end
 
       private
 
-      def extract_nested
+      def extract_nested_data
         data.merge! data.delete(:object) if data[:object]
       end
 
-      def unify_id
-        data[:id] ||= data.delete(:new_id)
-      end
-
-      def drop_xsi_prefix
-        data.keys.select {|it| it.to_s.include? '@xsi' }.each do |key|
-          new_key = key.to_s.split(':').last.to_sym
-          data[new_key] = data.delete key
+      def rename_fields
+        RENAME.each do |old_name, new_name|
+          next unless data[old_name]
+          data[new_name] = data.delete old_name
         end
       end
 
-      def delete_ignored_fields
-        data.delete_if {|key,_| IGNORED_FIELDS.include? key }
+      def delete_ignored_fields(data=@data)
+        data.delete_if do |key, value|
+          delete_ignored_fields value if value.is_a? Hash
+          IGNORE.include? key
+        end
+      end
+
+      def delete_empty_parents
+        if (data[:parent_data] || {})[:id] == '0'
+          data.delete :parent_data
+        end
       end
     end
   end
