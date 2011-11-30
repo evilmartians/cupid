@@ -35,4 +35,14 @@ describe Cupid::Create do
 
     it_should_behave_like :creation
   end
+
+  context '#create_path' do
+    let(:new_folders) {['my emails', Time.now.to_i, 'level2', 'level3']}
+
+    it do
+      expect {
+        subject.create_path *new_folders
+      }.to change { subject.folders.size }.by new_folders.size - 1
+    end
+  end
 end

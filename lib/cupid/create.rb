@@ -17,24 +17,19 @@ class Cupid
     end
 
     def create_path(*folder_names)
-      # TODO: REFACTOR ME BY SPECIALISING RESPONSE RESULTS WITH TYPE
-      # AND ADD SPEC COVERAGE FOR THIS METHOD
-      all = folders
-      folder_names.inject(0) do |parent_id, name|
-        existing_folder = all.find do |it|
-          it[:name] == name and it[:parent_folder][:id] == parent_id.to_s
-        end
-        if existing_folder
-          existing_folder[:id]
-        else
-          create_folder(name, parent_id)[:new_id]
-        end
+      children = folders.select(&:root?)
+      folder_names.inject(nil) do |parent, name|
+        folder = children.find {|it| it.name == name }
+        children = folder ? folder.children : []
+        folder or create_folder(name, parent)
       end
     end
 
     private
 
     def folder(title, parent, options)
+      raise ArgumentError unless title and parent and options
+
       {
         :name           => title,
         :content_type   => :email,
@@ -49,6 +44,8 @@ class Cupid
     end
 
     def email(title, body, options)
+      raise ArgumentError unless title and body and options
+
       {
         :email_type    => 'HTML',
         :character_set => 'utf-8',
@@ -59,6 +56,8 @@ class Cupid
     end
 
     def delivery(email, list)
+      raise ArgumentError unless email and list
+
       {
         :email => { 'ID' => email },
         :list  => { 'ID' => list }
