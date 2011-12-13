@@ -4,9 +4,18 @@ class Cupid
     EMAIL_FIELDS    = %w(ID Name)
     FOLDER_FIELDS   = %w(ID Name ParentFolder.ID ParentFolder.Name)
     DELIVERY_FIELDS = %w(ID Status)
+    UI_EMAIL_FIELDS = %w(CustomerKey Name Email.ID EmailSubject CategoryID)
 
     def emails(name=nil, *fields)
-      retrieve 'Email', EMAIL_FIELDS + fields, filter_email_like(name)
+      retrieve 'Email',
+        EMAIL_FIELDS + fields,
+        filter_email_like(name)
+    end
+
+    def ui_emails(folder=nil, *fields)
+      retrieve 'EmailSendDefinition',
+        UI_EMAIL_FIELDS + fields,
+        filter_by_folder(folder)
     end
 
     def folders(*fields)
@@ -45,6 +54,10 @@ class Cupid
 
     def filter_email_like(name)
       server.filter 'Name', 'like', name
+    end
+
+    def filter_by_folder(id)
+      server.filter 'CategoryID', 'equals', id
     end
   end
 end
