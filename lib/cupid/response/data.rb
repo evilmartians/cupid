@@ -29,7 +29,7 @@ class Cupid
       end
 
       def success?
-        status == 'OK'
+        %w(MoreDataAvailable OK).include? status
       end
 
       def status
