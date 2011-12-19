@@ -5,7 +5,8 @@ class Cupid
       :get_system_status  => 'SystemStatusRequestMsg',
       :retrieve           => 'RetrieveRequestMsg',
       :create             => 'CreateRequest',
-      :delete             => 'DeleteRequest'
+      :delete             => 'DeleteRequest',
+      :update             => 'UpdateRequest'
     }
 
     attr_reader :account
@@ -19,6 +20,7 @@ class Cupid
     end
 
     def filter(field, operator, value)
+      return {} unless value
       {
         :filter => {
           :property => field,

@@ -12,7 +12,7 @@ class Cupid
       end
 
       attr_reader :data
-      fields :id
+      fields :id, :customer_key
 
       def initialize(data)
         @data = data

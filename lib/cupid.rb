@@ -5,7 +5,7 @@ class Cupid
   NAMESPACE = 'http://exacttarget.com/wsdl/partnerAPI'
   ENDPOINT  = 'https://webservice.s4.exacttarget.com/Service.asmx'
 
-  include Create, Delete, Retrieve
+  include Create, Update, Delete, Retrieve
 
   attr_reader :client, :server
 
