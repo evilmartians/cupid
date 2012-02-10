@@ -14,3 +14,4 @@ pkg
 rdoc
 spec/reports
 tmp
+example.rb

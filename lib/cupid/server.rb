@@ -4,6 +4,7 @@ class Cupid
       :version_info       => 'VersionInfoRequestMsg',
       :get_system_status  => 'SystemStatusRequestMsg',
       :retrieve           => 'RetrieveRequestMsg',
+      :schedule           => 'ScheduleRequestMsg',
       :create             => 'CreateRequest',
       :delete             => 'DeleteRequest',
       :update             => 'UpdateRequest'
