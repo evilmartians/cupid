@@ -29,7 +29,7 @@ class Cupid
       end
 
       def success?
-        %w(MoreDataAvailable OK).include? status
+        body[:object_definition] || %w(MoreDataAvailable OK).include?(status)
       end
 
       def status
@@ -37,7 +37,7 @@ class Cupid
       end
 
       def raw_results
-        body[:results]
+        body[:results] || body[:object_definition]
       end
 
       def error_message

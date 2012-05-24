@@ -1,63 +1,86 @@
 class Cupid
   module Retrieve
-    LIST_FIELDS     = %w(ID ListName CustomerKey)
-    EMAIL_FIELDS    = %w(ID Name)
-    FOLDER_FIELDS   = %w(ID Name ParentFolder.ID ParentFolder.Name)
-    DELIVERY_FIELDS = %w(ID Status)
-    UI_EMAIL_FIELDS = %w(CustomerKey Name Email.ID EmailSubject CategoryID)
 
-    def emails(name=nil, *fields)
-      retrieve 'Email',
-        EMAIL_FIELDS + fields,
-        filter_email_like(name)
+    extend Guard
+
+    def emails_by_name(pattern)
+      retrieve(:Email) { name =~ pattern }
+    end
+    protect_with_guard :emails_by_name, Guard::String
+
+
+    def emails_by_id(*ids)
+      return [] unless ids.any?
+      retrieve(:Email) { id =~ ids }
+    end
+    protect_with_guard :emails_by_id, Guard::Rest[Guard::Integer]
+
+
+    def email_by_id(id)
+      retrieve_first(:Email) { |email| email.id == id }
+    end
+    protect_with_guard :email_by_id, Guard::Integer
+
+
+    def send_object_by_id(id)
+      retrieve_first(:Send) { |s| s.id == id }
+    end
+    protect_with_guard :send_object_by_id, Guard::Integer
+
+
+    def send_objects_by_email_id(id)
+      retrieve(:Send) { email_id == id }
+    end
+    protect_with_guard :send_object_by_id, Guard::Integer
+
+
+    def ui_emails(id)
+      retrieve(:EmailSendDefinition) { category_id == id }
+    end
+    protect_with_guard :ui_emails, Guard::Integer
+
+
+    def lists
+      retrieve :List
     end
 
-    def ui_emails(folder=nil, *fields)
-      retrieve 'EmailSendDefinition',
-        UI_EMAIL_FIELDS + fields,
-        filter_by_folder(folder)
+
+    def folders
+      data_folders :email
     end
 
-    def folders(*fields)
-      data_folders 'email', *fields
+
+    def ui_folders
+      data_folders :userinitiated
     end
 
-    def ui_folders(*fields)
-      data_folders 'userinitiated', *fields
-    end
 
-    def lists(*fields)
-      retrieve 'List', LIST_FIELDS + fields
-    end
-
-    def deliveries(*fields)
-      retrieve 'Send', DELIVERY_FIELDS + fields
-    end
-
-    private
-
-    def retrieve(type, fields, options={})
-      resources :retrieve, :retrieve_request => {
+    def retrieve(type, &filter)
+      model_cls = Models::module_eval(type.to_s)
+      options = {}
+      puts "filter = #{filter}"
+      options = model_cls.class_eval &filter unless filter.nil?
+      items = resources :retrieve, :retrieve_request => {
         :object_type => type,
-        :properties => fields,
-        'ClientIDs' => { 'ID' => server.account }
+        :properties => model_cls::properties,
+        "ClientIDs" => {
+          "ID" => server.account
+        }
       }.merge(options)
+      items.collect{ |item| model_cls.new item }
+    end
+    protect_with_guard :retrieve, Guard::Symbol, Guard::Proc
+
+    def retrieve_first(type, &filter)
+      retrieve(type, &filter).first
+    end
+    protect_with_guard :retrieve_first, Guard::Symbol, Guard::Proc
+
+    protected
+
+    def data_folders(type)
+      retrieve(:DataFolder) { content_type =~ type.to_s }
     end
 
-    def data_folders(type, *fields)
-      retrieve 'DataFolder', FOLDER_FIELDS + fields, filter_folders(type)
-    end
-
-    def filter_folders(type)
-      server.filter 'ContentType', 'like', type
-    end
-
-    def filter_email_like(name)
-      server.filter 'Name', 'like', name
-    end
-
-    def filter_by_folder(id)
-      server.filter 'CategoryID', 'equals', id
-    end
   end
 end

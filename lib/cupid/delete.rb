@@ -12,5 +12,9 @@ class Cupid
       objects = emails name
       objects.empty? ? [] : delete_emails(*objects)
     end
+
+    def delete_send(id)
+      resources :delete, server.send_objects([id])
+    end
   end
 end
