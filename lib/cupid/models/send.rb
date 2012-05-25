@@ -12,6 +12,8 @@ class Cupid
       convert(:email_id) { |email_id| email_id.to_i }
       convert(:status) { |status| status.downcase.to_sym }
 
+      belongs_to(:Email) { |send, email| email.id == send.email_id }
+
     end
   end
 end

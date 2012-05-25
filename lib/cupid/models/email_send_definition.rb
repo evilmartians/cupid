@@ -11,6 +11,8 @@ class Cupid
       convert(:category_id) { |category_id| category_id.to_i }
       convert(:email_id) { |email_id| email_id.to_i }
 
+      belongs_to(:Email) { |send_def, email| email.id == send_def.email_id }
+
     end
   end
 end
