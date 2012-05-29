@@ -19,7 +19,7 @@ class Cupid
         protected
 
         def convert_name(name)
-          name.to_s.gsub(/(?<=[a-z])[A-Z]/){ |m| "_#{m.downcase}" }.downcase
+          name.to_s.gsub(/[a-z][A-Z]/){ |m| "#{m[0].chr}_#{m[1].chr.downcase}" }.downcase
         end
 
         def map_fields(fields)
