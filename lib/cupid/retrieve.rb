@@ -1,4 +1,4 @@
-require_relative "typesig"
+require "./typesig.rb"
 
 class Cupid
   module Retrieve
