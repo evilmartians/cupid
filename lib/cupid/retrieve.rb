@@ -1,5 +1,3 @@
-require "./typesig.rb"
-
 class Cupid
   module Retrieve
 
