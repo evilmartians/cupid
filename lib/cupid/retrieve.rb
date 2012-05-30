@@ -31,7 +31,7 @@ class Cupid
     def send_objects_by_email_id(id)
       retrieve(:Send) { email_id == id }
     end
-    typesig :send_object_by_id, Fixnum
+    typesig :send_objects_by_email_id, Fixnum
 
 
     def ui_emails(id)
