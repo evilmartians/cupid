@@ -46,12 +46,12 @@ class Cupid
 
 
     def folders
-      data_folders :email
+      retrieve(:DataFolder) { content_type =~ "email" }
     end
 
 
     def ui_folders
-      data_folders :userinitiated
+      retrieve(:DataFolder) { content_type =~ "userinitiated" }
     end
 
 
@@ -75,13 +75,6 @@ class Cupid
       retrieve(type, &filter).first
     end
     typesig :retrieve_first, Symbol
-
-
-    protected
-
-    def data_folders(type)
-      retrieve(:DataFolder) { content_type =~ type.to_s }
-    end
 
   end
 end
