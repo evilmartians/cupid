@@ -59,7 +59,8 @@ class Cupid
               instance_variable_get "@cached_#{varname}"
             else
               raise "model is not associated with Cupid instance" unless @cupid
-              value = @cupid.retrieve_first model, &filter.curry[self]
+              this = self
+              value = @cupid.retrieve_first model, &lambda{ |other| filter.call(this, other) }
               instance_variable_set "@has_cached_#{varname}", true
               instance_variable_set "@cached_#{varname}", value
               value
@@ -75,7 +76,8 @@ class Cupid
               instance_variable_get "@cached_#{varname}"
             else
               raise "model is not associated with Cupid instance" unless @cupid
-              value = @cupid.retrieve model, &filter.curry[self]
+              this = self
+              value = @cupid.retrieve model, &lambda{ |other| filter.call(this, other) }
               instance_variable_set "@hash_cached_#{varname}", true
               instance_variable_set "@cached_#{varname}", value
               value
