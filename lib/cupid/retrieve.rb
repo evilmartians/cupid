@@ -66,7 +66,7 @@ class Cupid
           "ID" => server.account
         }
       }.merge(options)
-      items.collect{ |item| model_cls.new(self, item) }
+      Models::Set.new self, type, items.collect{ |item| model_cls.new(self, item) }
     end
     typesig :retrieve, Symbol
 

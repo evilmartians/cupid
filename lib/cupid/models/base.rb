@@ -23,6 +23,10 @@ class Cupid
         end
 
         def map_fields(fields)
+          original_name = name.split("::").last.to_sym
+          (class << self; self; end).instance_eval do
+            define_method(:model_name) { original_name }
+          end
           field_spec = {}
           fields.each_pair do |name, property|
             if property.is_a? Hash
@@ -97,6 +101,21 @@ class Cupid
             instance_variable_set "@#{name}", blk.call(instance_variable_get("@#{name}"))
           end
         end
+      end
+
+      def delete_repr
+        raise "delete repr is not available for models without `id`" unless self.class::field_spec.keys.include? :id
+        raise "model is not associated with Cupid instance" unless @cupid
+        {
+          "ID" => id,
+          :client => {
+            "ID" => @cupid.server.account
+          }
+        }
+      end
+
+      def delete!
+        Set.new(@cupid, self.class::model_name, [self]).delete!.first
       end
 
       protected
