@@ -1,5 +1,6 @@
 require 'savon'
 require File.expand_path "../cupid/typesig.rb", __FILE__
+require File.expand_path "../cupid/models/base.rb", __FILE__
 Dir[File.expand_path '../cupid/**/*.rb', __FILE__].each {|it| require it }
 
 class Cupid
