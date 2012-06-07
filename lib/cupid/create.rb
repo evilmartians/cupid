@@ -17,11 +17,16 @@ class Cupid
     end
 
     def create_path(*folder_names)
-      children = folders.select(&:root?)
+      all_folders = folders
+      children = all_folders.reject &:parent_id
       folder_names.inject(nil) do |parent, name|
-        folder = children.find {|it| it.name == name }
-        children = folder ? folder.children : []
-        folder or create_folder(name, parent)
+        folder = children.find{ |f| f.name == name }
+        children = if folder
+          all_folders.select{ |f| f.parent_id == folder.id }
+        else
+          []
+        end
+        folder or create_folder(name, parent.id)
       end
     end
 
