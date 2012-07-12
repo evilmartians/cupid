@@ -41,7 +41,11 @@ class Cupid
       end
 
       def error_message
-        raw_results ? raw_results[:status_message] : status
+        if raw_results and raw_results.is_a? Hash
+          raw_results[:status_message]
+        else
+          status
+        end
       end
     end
   end
