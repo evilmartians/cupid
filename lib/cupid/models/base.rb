@@ -4,8 +4,9 @@ class Cupid
 
       class <<self
 
-        def properties
-          field_spec.values.collect{ |spec| spec[:property] }
+        def properties(names=nil)
+          names = field_spec.keys if names.nil?
+          names.collect{ |name| field_spec[name][:property] }
         end
 
         def field_spec
@@ -14,6 +15,14 @@ class Cupid
 
         def convert_spec
           {}
+        end
+
+        def inspect
+          "Cupid:#{model_name}(#{field_spec.keys.join ', '})"
+        end
+        
+        def to_s
+          inspect
         end
 
         protected
@@ -116,6 +125,24 @@ class Cupid
 
       def delete!
         Set.new(@cupid, self.class::model_name, [self]).delete!.first
+      end
+
+      def inspect
+        values = []
+        id_str = ""
+        self.class.field_spec.keys.each do |key|
+          if key == :id
+            id_str = "##{id}"
+          else
+            val = self.send key
+            values << "#{key}=#{val.inspect}" if val            
+          end
+        end
+        "<Cupid:#{self.class.model_name}#{@cupid ? '' : ':unbound'}#{id_str}#{values.any? ? " #{values.join ', '}" : ""}>"
+      end
+      
+      def to_s
+        inspect
       end
 
       protected

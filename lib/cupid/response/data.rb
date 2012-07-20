@@ -3,17 +3,25 @@ class Cupid
     class Data
       Error = Class.new StandardError
 
-      def self.from(wrapped_body)
-        new(wrapped_body).results
+      def self.from(wrapped_body, check)
+        new(wrapped_body, check).results
       end
 
-      def initialize(wrapped_body)
+      def initialize(wrapped_body, check)
         extract wrapped_body
-        check_status!
+        check_status! if check
       end
 
       def results
         [raw_results].compact.flatten
+      end
+
+      def has_more?
+        status == "MoreDataAvailable"
+      end
+
+      def request_id
+        body[:request_id]
       end
 
       private

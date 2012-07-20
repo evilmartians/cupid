@@ -2,11 +2,17 @@ class Cupid
 
   class FilterBase
 
+    attr_reader :empty
+
     def &(other)
+      return self if empty
+      return other if other.empty
       Logical.new self, "AND", other
     end
 
     def |(other)
+      return other if empty
+      return self if other.empty
       Logical.new self, "OR", other
     end
 
@@ -92,6 +98,18 @@ class Cupid
       self
     end
 
+    def in(value)
+      raise ArgumentError.new "`in` filter requires Enumerable" unless value.is_a? Enumerable
+      @empty = true if value.count == 0
+      if value.count == 1
+        equals value[0]
+      else
+        @value = value
+        @operator = "IN"
+        self
+      end
+    end
+
     def ==(value)
       equals value
     end
@@ -100,14 +118,14 @@ class Cupid
       if value.is_a? String
         like value
       elsif value.is_a? Enumerable
-        raise ArgumentError.new "using filter =~ [] makes no sense" unless value.any?
-        filters = value.reduce(self == value.shift){ |filters, val| filters |= Filter.send(@field_name) == val}
+        send :in, value
       else
         raise ArgumentError.new "filter =~ arg should be String or Enumerable"
       end
     end
 
     def to_hash(wrap=true)
+      return nil if empty
       filter = {
         :property => @field_name,
         :simple_operator => @operator,
