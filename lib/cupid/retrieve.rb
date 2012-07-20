@@ -75,7 +75,7 @@ class Cupid
       options = {}
       unless filter.nil?
         options = model_cls.class_eval(&filter).to_hash
-        return if options.ni?
+        return if options.nil?
       end
       resp = resources :retrieve, retrieve_request_for(type, options, properties), true, false
       yield cast_items(type, resp.results)
