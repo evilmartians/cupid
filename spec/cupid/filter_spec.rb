@@ -25,7 +25,7 @@ describe Cupid::Filter do
   it "should work with procs" do
     TestModel.create_filter(proc{ name == "foo" }).should == simple_name_filter
     TestModel.create_filter{ name ==  "foo"}.should == simple_name_filter
-    TestModel.create_filter{ (name == "foo") & (id == 1) }.should == complex_filterTest
+    TestModel.create_filter{ (name == "foo") & (id == 1) }.should == complex_filter
     TestModel.create_filter(proc{ (name == "foo") & (id == 1) }).should == complex_filter
   end
 
