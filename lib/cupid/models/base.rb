@@ -25,6 +25,18 @@ class Cupid
           inspect
         end
 
+        def create_filter(data=nil, &filter_proc)
+          if data.is_a? Hash
+            data.collect{ |k, v| self.send(k) == v }.inject(:&).to_hash
+          elsif data.is_a? Proc
+            class_eval(&data).to_hash
+          elsif block_given?
+            class_eval(&filter_proc).to_hash
+          else
+            raise "arg for Cupid::Models::Base::create_filter should be Hash or Proc"
+          end
+        end
+
         protected
 
         def convert_name(name)
@@ -48,7 +60,7 @@ class Cupid
               }
             end
             (class << self; self; end).instance_eval do
-              define_method(name) { Filter::send property }
+              define_method(name) { Filter[property] }
             end
             attr_reader name
           end
