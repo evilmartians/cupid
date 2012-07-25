@@ -16,6 +16,13 @@ class Cupid
       create 'Send', delivery(email, list)
     end
 
+    def create_list(name)
+      raise ArgumentError unless name
+      response = create "List", :list_name => name
+      list_id = response.data[:id].to_i
+      retrieve_first(:List){ id == list_id }
+    end
+
     def create_path(*folder_names)
       all_folders = folders
       children = all_folders.reject &:parent_id
@@ -68,5 +75,6 @@ class Cupid
         :list  => { 'ID' => list }
       }
     end
+
   end
 end
