@@ -1,10 +1,6 @@
 class Cupid
   module Models
-    class SubscriberSet < Set
-
-      def initialize(cupid, type, items)
-        super(cupid, type, items)
-      end
+    class SubscriberSet < Cupid::Models::Set
 
       def add_to_list(list)
         obj = @cupid.server.objects "Subscriber", self.collect{ |sub|
