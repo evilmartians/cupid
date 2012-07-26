@@ -21,13 +21,22 @@ class Cupid
       end
       define_method method_name do |*args, &blk|
         field_specs.each_with_index do |spec, index|
-          type, cls = spec
+          type, classes = spec
+          classes = [classes].flatten
           val = args[index]
           if type == :required
-            raise ArgumentError.new "argument #{index} should be #{cls.name} given #{val.class.name}" unless val.kind_of? cls
+            valid = false
+            classes.each do |cls|
+              valid = true if val.kind_of? cls
+            end
+            raise ArgumentError.new "argument #{index} should be one of [#{classes.collect(&:name).join(', ')}] given #{val.class.name}" unless valid
           elsif type == :optional
             unless args[index].nil?
-              raise ArgumentError.new "argument #{index} should be #{cls.name} given #{val.class.name}" unless val.kind_of? cls
+              valid = false
+              classes.each do |cls|
+                valid = true if val.kind_of? cls
+              end
+              raise ArgumentError.new "argument #{index} should be one of [#{classes.collect(&:name).join(', ')}] given #{val.class.name}" unless valid
             end
           elsif type == :rest
             args.slice(index, args.size).each do |val|

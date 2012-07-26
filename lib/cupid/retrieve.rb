@@ -55,27 +55,25 @@ class Cupid
     end
 
 
-    def retrieve(type, &filter)
+    def retrieve(type, filter_data=nil, &filter_proc)
       model_cls = Models::module_eval(type.to_s)
       options = {}
-      unless filter.nil?
-        options = model_cls.class_eval(&filter).to_hash
-        return cast_items(type, []) if options.nil?
+      if filter_data || filter_proc
+        options = model_cls::create_filter(filter_data || filter_proc)
       end
       items = resources :retrieve, retrieve_request_for(type, options)
       cast_items type, items
     end
-    typesig :retrieve, Symbol
+    typesig :retrieve, Symbol, :optional, [Proc, Hash]
 
 
-    def chunked_retrieve(type, properties, filter)
+    def chunked_retrieve(type, properties=nil, filter_data=nil, &filter_proc)
       raise "chunked_retrieve requires a block" unless block_given?
-      properties = nil if properties.empty?
+      properties = nil if properties.nil? or properties.empty?
       model_cls = Models::module_eval(type.to_s)
       options = {}
-      unless filter.nil?
-        options = model_cls.class_eval(&filter).to_hash
-        return if options.nil?
+      if filter_data || filter_proc
+        options = model_cls::create_filter(filter_data || filter_proc)
       end
       resp = resources :retrieve, retrieve_request_for(type, options, properties), true, false
       yield cast_items(type, resp.results)
@@ -84,14 +82,13 @@ class Cupid
         yield cast_items(type, resp.results)
       end
     end
-    typesig :chunked_retrieve, Symbol, Array, Proc
+    typesig :chunked_retrieve, Symbol, :optional, Array, :optional, [Hash, Proc]
 
 
-    def retrieve_first(type, &filter)
-      retrieve(type, &filter).first
+    def retrieve_first(type, filter_data=nil, &filter_proc)
+      retrieve(type, filter_data, &filter_proc).first
     end
-    typesig :retrieve_first, Symbol
-
+    typesig :retrieve_first, Symbol, :optional, [Hash, Proc]
 
     private
 
