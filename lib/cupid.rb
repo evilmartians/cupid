@@ -45,10 +45,12 @@ class Cupid
     Savon::configure do |config|
       config.log = log || false
     end
-    Savon::Client.new.tap do |client|
+    client = Savon::Client.new.tap do |client|
       client.wsdl.namespace = NAMESPACE
       client.wsdl.endpoint  = ENDPOINT
       client.wsse.credentials username, password
     end
+    client.http.read_timeout = 60
+    client
   end
 end
