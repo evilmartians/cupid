@@ -54,6 +54,14 @@ class Cupid
       end
     end
 
+    def inspect
+      "#{@left} #{@operator} #{@right}"
+    end
+
+    def to_s
+      inspect
+    end
+
     def xsi_type
       "ComplexFilterPart"
     end
@@ -76,6 +84,17 @@ class Cupid
         new name
       end
 
+    end
+
+    def inspect
+      op_repr = @operator
+      op_repr = "==" if op_repr == "equals"
+      op_repr = "=~" if op_repr == "like"
+      "#{@field_name} #{op_repr} #{@value.inspect}"
+    end
+
+    def to_s
+      inspect
     end
 
     def method_missing(name, *args, &blk)

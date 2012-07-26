@@ -10,11 +10,17 @@ class Cupid
 
   include Create, Update, Retrieve , Schedule, Describe
 
-  attr_reader :client, :server
+  attr_reader :client, :server, :logger
 
-  def initialize(username, password, account)
-    @client = client_with username, password
+  def initialize(username, password, account, params={})
+    @client = client_with username, password, params[:savon_log]
     @server = Server.new account
+    @logger = params[:logger] || begin
+      logger = Logger.new(STDOUT)
+      logger.progname = "Cupid"
+      logger.level = Logger::INFO
+      logger
+    end
   end
 
   def resources(action, xml, check=true, return_results=true)
@@ -34,7 +40,11 @@ class Cupid
     end
   end
 
-  def client_with(username, password)
+  def client_with(username, password, log)
+    HTTPI.log = log || false
+    Savon::configure do |config|
+      config.log = log || false
+    end
     Savon::Client.new.tap do |client|
       client.wsdl.namespace = NAMESPACE
       client.wsdl.endpoint  = ENDPOINT

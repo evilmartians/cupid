@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'builder',   '>= 2'
   s.add_dependency 'nokogiri',  '~> 1'
-  s.add_dependency 'savon',     '~> 0.9'
+  s.add_dependency 'savon',     '~> 1.1.0'
   s.add_dependency 'activesupport', '~> 3.0'
 
   s.add_development_dependency 'rspec', '~> 2'

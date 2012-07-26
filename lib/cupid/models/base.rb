@@ -27,11 +27,11 @@ class Cupid
 
         def create_filter(data=nil, &filter_proc)
           if data.is_a? Hash
-            data.collect{ |k, v| self.send(k) == v }.inject(:&).to_hash
+            data.collect{ |k, v| self.send(k) == v }.inject(:&)
           elsif data.is_a? Proc
-            class_eval(&data).to_hash
+            class_eval(&data)
           elsif block_given?
-            class_eval(&filter_proc).to_hash
+            class_eval(&filter_proc)
           else
             raise "arg for Cupid::Models::Base::create_filter should be Hash or Proc"
           end

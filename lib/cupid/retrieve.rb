@@ -58,9 +58,13 @@ class Cupid
     def retrieve(type, filter_data=nil, &filter_proc)
       model_cls = Models::module_eval(type.to_s)
       options = {}
+      where = ""
       if filter_data || filter_proc
-        options = model_cls::create_filter(filter_data || filter_proc)
+        filter = model_cls::create_filter(filter_data || filter_proc)
+        options = filter.to_hash
+        where = " WHERE #{filter}"
       end
+      logger.info("LOAD #{type}#{where}")
       items = resources :retrieve, retrieve_request_for(type, options)
       cast_items type, items
     end
@@ -72,9 +76,13 @@ class Cupid
       properties = nil if properties.nil? or properties.empty?
       model_cls = Models::module_eval(type.to_s)
       options = {}
+      where = ""
       if filter_data || filter_proc
-        options = model_cls::create_filter(filter_data || filter_proc)
+        filter = model_cls::create_filter(filter_data || filter_proc)
+        options = filter.to_hash
+        where = " WHERE #{filter}"
       end
+      logger.info("LOAD #{type}#{where}")
       resp = resources :retrieve, retrieve_request_for(type, options, properties), true, false
       yield cast_items(type, resp.results)
       while resp.has_more?

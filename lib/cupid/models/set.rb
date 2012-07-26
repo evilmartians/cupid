@@ -9,15 +9,22 @@ class Cupid
       end
 
       def delete!
-        objects = {
-          :objects => collect(&:delete_repr),
-          :attributes! => {
-            :objects => {
-              "xsi:type" => @type
+        if any?
+          objects = {
+            :objects => collect(&:delete_repr),
+            :attributes! => {
+              :objects => {
+                "xsi:type" => @type
+              }
             }
           }
-        }
-        @cupid.resources :delete, objects
+          if self[0].class.properties.include? "ID"
+            @cupid.logger.info "DELETE #{@type} WHERE ID IN (#{collect(&:id).join(', ')})"
+          else
+            @cupid.logger.info "DELETE #{count} #{@type}"
+          end
+          @cupid.resources :delete, objects
+        end
       end
 
     end

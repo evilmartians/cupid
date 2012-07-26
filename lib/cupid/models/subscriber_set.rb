@@ -13,6 +13,7 @@ class Cupid
             }]
           }
         }
+        @cupid.logger.info "ADD #{count} Subscribers TO #{list}"
         @cupid.resources :update, obj, false
       end
 
