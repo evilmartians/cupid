@@ -9,6 +9,11 @@ class Cupid
           names.collect{ |name| field_spec[name][:property] }
         end
 
+        def fake(cupid, id)
+          raise NotImplementedError.new "can not fake model with no ID field" unless properties.include? "ID"
+          new cupid, :id => id
+        end
+
         def field_spec
           raise NotImplementedError.new "call map_fields for model subclass"
         end
