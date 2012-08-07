@@ -6,11 +6,15 @@ class Cupid
                  :name => "Name",
                  :description => "Description",
                  :allow_errors => "AllowErrors",
-                 :filename => "FileSpec",
+                 :update_type => "UpdateType",
+                 :file_location_id => "RetrieveFileTransferLocation.ObjectID",
+                 :file_name => "FileSpec",
                  :file_type => "FileType",
                  :delimiter => "Delimiter",
                  :standard_quoted_strings => "StandardQuotedStrings",
-                 :list_id => { :property => "DestinationObject.ID", :path => "destination_object.id" }
+                 :eol => "EndOfLineRepresentation",
+                 :null => "NullRepresentation",
+                 :list_id => "DestinationObject.ID"
 
       convert(:list_id){ |list_id| list_id.to_i }
 
