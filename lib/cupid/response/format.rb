@@ -1,7 +1,7 @@
 class Cupid
   module Response
     class Format
-      IGNORE = [:partner_key, :object_id]
+      IGNORE = [:partner_key]
       RENAME = {
         :new_id        => :id,
         :'@xsi:type'   => :type,
