@@ -8,7 +8,8 @@ class Cupid
       :create             => 'CreateRequest',
       :delete             => 'DeleteRequest',
       :update             => 'UpdateRequest',
-      :describe           => 'DefinitionRequestMsg'
+      :describe           => 'DefinitionRequestMsg',
+      :perform            => "PerformRequestMsg"
     }
 
     attr_reader :account
