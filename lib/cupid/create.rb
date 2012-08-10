@@ -37,6 +37,11 @@ class Cupid
       end
     end
 
+    def create_import_definition(name, list_id, source_key, filename)
+      resp = create "ImportDefinition", import_definition(name, list_id, source_key, filename)
+      Cupid::Models::ImportDefinition.new self, resp.data
+    end
+
     private
 
     def folder(title, parent, options)
@@ -73,6 +78,28 @@ class Cupid
       {
         :email => { 'ID' => email },
         :list  => { 'ID' => list }
+      }
+    end
+
+    def import_definition(name, list_id, source_key, filename)
+      raise ArgumentError unless name and list_id and source_key and filename
+      {
+        :name => name,
+        :customer_key => name,
+        :retrieve_file_transfer_location => {
+          :customer_key => source_key
+        },
+        :destination_object => {
+          :ID => list_id
+        },
+        :field_mapping_type => "InferFromColumnHeadings",
+        :allow_errors => true,
+        :file_spec => filename,
+        :file_type => "CSV",
+        :update_type => "AddAndDoNotUpdate",
+        :attributes! => {
+          :destination_object => { "xsi:type" => "List" }
+        }
       }
     end
 
