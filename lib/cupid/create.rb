@@ -24,17 +24,11 @@ class Cupid
     end
 
     def create_path(*folder_names)
-      all_folders = folders
-      children = all_folders.reject &:parent_id
-      folder_names.inject(nil) do |parent, name|
-        folder = children.find{ |f| f.name == name }
-        children = if folder
-          all_folders.select{ |f| f.parent_id == folder.id }
-        else
-          []
-        end
-        folder or create_folder(name, parent.id)
-      end
+      create_folder_path "email", folder_names
+    end
+
+    def create_list_path(*folder_names)
+      create_folder_path "list", folder_names
     end
 
     def create_import_definition(name, list_id, source_key, filename)
@@ -43,6 +37,30 @@ class Cupid
     end
 
     private
+
+    def create_folder_path(content_type, folder_names)
+      all_folders = retrieve(:DataFolder){ |f| f.content_type =~ content_type }
+      children = all_folders.reject &:parent_id
+      folder_names.inject(nil) do |parent, name|
+        folder = children.find{ |f| f.name == name }
+        if folder
+          children = all_folders.select{ |f| f.parent_id == folder.id }
+        else
+          children = []
+        end
+        if parent
+          parent_id = parent.id
+        else
+          parent_id = nil
+        end
+        if folder
+          folder
+        else
+          resp = create_folder name, parent_id, content_type: content_type
+          retrieve_first :DataFolder, id: resp.id.to_i
+        end
+      end
+    end
 
     def folder(title, parent, options)
       raise ArgumentError unless title and parent and options
