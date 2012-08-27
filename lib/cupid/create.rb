@@ -16,9 +16,9 @@ class Cupid
       create 'Send', delivery(email, list)
     end
 
-    def create_list(name)
+    def create_list(name, folder_id)
       raise ArgumentError unless name
-      response = create "List", :list_name => name
+      response = create "List", :list_name => name, :category => folder_id
       list_id = response.data[:id].to_i
       retrieve_first(:List){ id == list_id }
     end
