@@ -33,7 +33,7 @@ class Cupid
 
     def create_import_definition(name, list_id, source_key, filename)
       response = create "ImportDefinition", import_definition(name, list_id, source_key, filename)
-      retrieve_first(:ImportDefinition, id: response.data[:id].to_i)
+      retrieve_first(:ImportDefinition, name: name)
     end
 
     private
