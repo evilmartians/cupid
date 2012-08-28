@@ -32,8 +32,8 @@ class Cupid
     end
 
     def create_import_definition(name, list_id, source_key, filename)
-      resp = create "ImportDefinition", import_definition(name, list_id, source_key, filename)
-      Cupid::Models::ImportDefinition.new self, resp.data
+      response = create "ImportDefinition", import_definition(name, list_id, source_key, filename)
+      retrieve_first(:ImportDefinition, id: response.id.to_i)
     end
 
     private
