@@ -103,7 +103,6 @@ class Cupid
       raise ArgumentError unless name and list_id and source_key and filename
       {
         :name => name,
-        :customer_key => name,
         :retrieve_file_transfer_location => {
           :customer_key => source_key
         },
