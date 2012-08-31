@@ -36,6 +36,16 @@ class Cupid
       retrieve_first(:ImportDefinition, name: name)
     end
 
+    def create_send_definition(params)
+      email = params[:email_id]
+      list = params[:list_id]
+      send_classification = params[:send_classification_key]
+      sender_profile = params[:sender_profile_key]
+      customer_key = params[:customer_key]
+      response = create "EmailSendDefinition", send_definition(customer_key, email, list, send_classification, sender_profile)
+      retrieve_first :EmailSendDefinition, name: response.data[:name]
+    end
+
     private
 
     def create_folder_path(content_type, folder_names)
@@ -96,6 +106,26 @@ class Cupid
       {
         :email => { 'ID' => email },
         :list  => { 'ID' => list }
+      }
+    end
+
+    def send_definition(customer_key, email, list, send_classification, sender_profile)
+      raise ArgumentError unless customer_key and email and list and send_classification and sender_profile
+      raise ArgumentError if customer_key.length > 64
+      {
+        name: customer_key,
+        customer_key: customer_key,
+        is_multipart: true,
+        send_classification: { customer_key: send_classification },
+        email: { id: email },
+        sender_profile: { customer_key: sender_profile },
+        send_definition_list: [
+          {
+            data_source_type_id: "List",
+            send_definition_list_type: "SourceList",
+            list: { id: list }
+          }
+        ]
       }
     end
 

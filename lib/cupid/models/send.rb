@@ -6,14 +6,20 @@ class Cupid
                  :status =>   "Status",
                  :email_id => "Email.ID",
                  :send_at =>  "SendDate",
-                 :sent_at =>  "SentDate"
+                 :sent_at =>  "SentDate",
+                 :from_name => "FromName",
+                 :from_address => "FromAddress",
+                 :subject => "Subject",
+                 :send_def_key => "EmailSendDefinition.CustomerKey"
 
-      convert(:id) { |id| id.to_i }
-      convert(:email_id) { |email_id| email_id.to_i }
+      convert :id, &:to_i
+      convert :email_id, &:to_i
+      convert :subject, &:strip
       convert(:status) { |status| status.downcase.to_sym }
 
       belongs_to(:Email) { |send, email| email.id == send.email_id }
-
+      belongs_to(:EmailSendDefinition){ |send, send_def| send_def.customer_key == send.send_def_key }
+  
     end
   end
 end
