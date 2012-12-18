@@ -46,7 +46,23 @@ class Cupid
       retrieve_first :EmailSendDefinition, name: response.data[:name]
     end
 
+    def create_triggered_send(user_key, definition_key, attributes)
+      create "TriggeredSend", triggered_send(user_key, definition_key, attributes)
+    end
+
     private
+
+    def triggered_send(user_key, definition_key, attributes)
+      {
+        triggered_send_definition: {
+          customer_key: definition_key
+        },
+        subscribers: {
+          subscriber_key: user_key,
+          attributes: attributes.collect{ |k, v| {name: k, value: v}}
+        }
+      }
+    end
 
     def create_folder_path(content_type, folder_names)
       all_folders = retrieve(:DataFolder){ |f| f.content_type =~ content_type }
