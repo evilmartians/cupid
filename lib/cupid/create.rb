@@ -46,19 +46,35 @@ class Cupid
       retrieve_first :EmailSendDefinition, name: response.data[:name]
     end
 
-    def create_triggered_send(user_key, definition_key, attributes)
-      create "TriggeredSend", triggered_send(user_key, definition_key, attributes)
+    def create_triggered_send(user_key, email_address, definition_key, attributes)
+      create "TriggeredSend", triggered_send(user_key, email_address, definition_key, attributes)
+    end
+
+    def create_de_object(de_key, properties)
+      create "DataExtensionObject", data_extension_object(de_key, properties)
     end
 
     private
 
-    def triggered_send(user_key, definition_key, attributes)
+    def data_extension_object(de_key, properties)
+      {
+        partner_key: nil,
+        object_id: nil,
+        customer_key: de_key,
+        properties: {
+          property: properties.collect{ |k, v| {name: k, value: v}}
+        }
+      }
+    end
+
+    def triggered_send(user_key, email_address, definition_key, attributes)
       {
         triggered_send_definition: {
           customer_key: definition_key
         },
         subscribers: {
           subscriber_key: user_key,
+          email_address: email_address,
           attributes: attributes.collect{ |k, v| {name: k, value: v}}
         }
       }
