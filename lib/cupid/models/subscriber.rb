@@ -8,6 +8,7 @@ class Cupid
                  :unsubscribed => "UnsubscribedDate"
 
       convert(:id) { |id| id.to_i }
+      convert(:key) { |key| key.to_i }
 
       has_many(:ListSubscriber) { |sub, list_sub| (list_sub.subscriber_key == sub.key) & (list_sub.status == "Active") }
 
