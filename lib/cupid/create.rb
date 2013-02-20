@@ -46,6 +46,14 @@ class Cupid
       retrieve_first :EmailSendDefinition, name: response.data[:name]
     end
 
+    def create_subscrbier(user_key, email_address, properties)
+      create "Subscriber", {
+          :customer_key => user_key,
+          :email_address => email_address,
+          :attributes => properties.collect{ |k, v| {name: k, value: v} }
+        }
+    end
+
     def create_triggered_send(user_key, email_address, definition_key, attributes)
       create "TriggeredSend", triggered_send(user_key, email_address, definition_key, attributes)
     end
