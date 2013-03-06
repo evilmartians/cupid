@@ -12,6 +12,15 @@ class Cupid
 
       has_many(:ListSubscriber) { |sub, list_sub| (list_sub.subscriber_key == sub.key) & (list_sub.status == "Active") }
 
+      class <<self
+
+        def fake(cupid, key)
+          raise NotImplementedError.new "can not fake model with no ID field" unless properties.include? "ID"
+          new cupid, :subscriber_key => key
+        end
+
+      end
+
       def lists
         if @cached_lists.nil?
           list_ids = list_subscribers.collect(&:list_id)
