@@ -24,11 +24,13 @@ class Cupid
     end
 
     def create_path(*folder_names)
-      create_folder_path "email", folder_names
+      folder_names.shift
+      create_folder_path_faster "email", 248, folder_names
     end
 
     def create_list_path(*folder_names)
-      create_folder_path "list", folder_names
+      folder_names.shift
+      create_folder_path_faster "list", 251, folder_names
     end
 
     def create_import_definition(name, list_id, source_key, filename)
@@ -63,6 +65,18 @@ class Cupid
     end
 
     private
+
+    def create_folder_path_faster(content_type, parent_id, names)
+      parent = Models::DataFolder::fake(self, parent_id)
+      names.inject(parent) do |parent, name|
+        folder = retrieve_first(:DataFolder){ |f| (f.parent_id == parent.id) & (f.name == name) }
+        if folder.nil?
+          resp = create_folder name, parent.id, content_type: content_type
+          folder = retrieve_first :DataFolder, id: resp.id.to_i
+        end
+        folder
+      end
+    end
 
     def data_extension_object(de_key, properties)
       {
