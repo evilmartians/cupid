@@ -1,25 +1,34 @@
 require 'savon'
+require File.expand_path "../cupid/typesig.rb", __FILE__
+require File.expand_path "../cupid/models/base.rb", __FILE__
+require File.expand_path "../cupid/models/set.rb", __FILE__
 Dir[File.expand_path '../cupid/**/*.rb', __FILE__].each {|it| require it }
 
 class Cupid
   NAMESPACE = 'http://exacttarget.com/wsdl/partnerAPI'
   ENDPOINT  = 'https://webservice.s4.exacttarget.com/Service.asmx'
 
-  include Create, Update, Delete, Retrieve , Schedule
+  include Create, Update, Retrieve , Schedule, Describe
 
-  attr_reader :client, :server
+  attr_reader :client, :server, :logger
 
-  def initialize(username, password, account)
-    @client = client_with username, password
+  def initialize(username, password, account, params={})
+    @client = client_with username, password, params[:savon_log]
     @server = Server.new account
+    @logger = params[:logger] || begin
+      logger = Logger.new(STDOUT)
+      logger.progname = "Cupid"
+      logger.level = Logger::INFO
+      logger
+    end
   end
 
-  def resources(action, xml)
-    Response.parse raw_request(action, xml).body
+  def resources(action, xml, check=true, return_results=true)
+    Response.parse raw_request(action, xml).body, check, return_results
   end
 
-  def resource(*args)
-    resources(*args).first
+  def resource(action, xml, check=true)
+    resources(action, xml, check).first
   end
 
   private
@@ -31,11 +40,17 @@ class Cupid
     end
   end
 
-  def client_with(username, password)
-    Savon::Client.new.tap do |client|
+  def client_with(username, password, log)
+    HTTPI.log = log || false
+    Savon::configure do |config|
+      config.log = log || false
+    end
+    client = Savon::Client.new.tap do |client|
       client.wsdl.namespace = NAMESPACE
       client.wsdl.endpoint  = ENDPOINT
       client.wsse.credentials username, password
     end
+    client.http.read_timeout = 60
+    client
   end
 end

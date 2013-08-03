@@ -7,7 +7,9 @@ class Cupid
       :schedule           => 'ScheduleRequestMsg',
       :create             => 'CreateRequest',
       :delete             => 'DeleteRequest',
-      :update             => 'UpdateRequest'
+      :update             => 'UpdateRequest',
+      :describe           => 'DefinitionRequestMsg',
+      :perform            => "PerformRequestMsg"
     }
 
     attr_reader :account
@@ -57,6 +59,10 @@ class Cupid
 
     def folders(ids)
       objects 'DataFolder', ids.map {|it| { 'ID' => it }}
+    end
+
+    def send_objects(ids)
+      objects "Send", ids.collect{ |id| {"ID" => id} }
     end
   end
 end
